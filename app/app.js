@@ -1,8 +1,19 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 
-app.get('/', function(req, res){ 
-    res.send('Hello World!');
+const authentication = require('./authentication.js');
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.use('/', express.static('static'));
+
+app.use('/authentication', authentication);
+
+app.use((req, res) => { 
+    res.status(404);
+    res.json({error: 'Not found'});
 });
+
 
 module.exports = app;
