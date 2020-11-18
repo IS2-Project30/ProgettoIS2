@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: "Project_30"
+  description: API per eseguire il login.
+  license:
+    name: G30
+servers:
+  - url: http://localhost:8000/
+    description: Localhost
+paths:
+  /login:
+    post:
+      description: >-
+        Autenticazione delle credenziali.
+      summary: Login di un utente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: 'Username dell utente'
+                password:
+                  type: string
+                  description: 'Password dell utente'
+      responses:
+        '201':
+          description: 'Utente autenticato. Link alla home della pagina'
+          headers:
+            'Location':
+              schema:
+                type: string
+              description: 'Link alla home'
+
+components:
+  schemas:
+    Utente:
+      type: object
+      required:
+        - id
+        - username
+        - password
+      properties:
+        id:
+          type: integer
+          description: 'Id dell utente'
+        username:
+          type: string
+          description: 'Username dell utente'
+        password:
+          type: string
+          description: 'Password dell utente'
