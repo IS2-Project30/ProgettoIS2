@@ -1,0 +1,19 @@
+{
+  "name": "app",
+  "version": "0.0.1",
+  "description": "Progetto Ingegneria del software 2",
+  "main": "app/app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manuelueluel/ProgettoIS2.git"
+  },
+  "author": "Diego Cappelletti, Marco Crespi, Manuel Mondin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Manuelueluel/ProgettoIS2/issues"
+  },
+  "homepage": "https://github.com/Manuelueluel/ProgettoIS2#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
