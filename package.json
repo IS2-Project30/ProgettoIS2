@@ -7,18 +7,18 @@
     "test": "jest",
     "setup": "node -r dotenv/config setup.js",
     "start": "nodemon index.js",
-    "start_local": "node -r dotenv/config index.js"
+    "start_local": "nodemon -r dotenv/config index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Manuelueluel/ProgettoIS2.git"
+    "url": "git+https://github.com/IS2-Project30/ProgettoIS2.git"
   },
   "author": "Diego Cappelletti, Marco Crespi, Manuel Mondin",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Manuelueluel/ProgettoIS2/issues"
+    "url": "https://github.com/IS2-Project30/ProgettoIS2/issues"
   },
-  "homepage": "https://github.com/Manuelueluel/ProgettoIS2#readme",
+  "homepage": "https://github.com/IS2-Project30/ProgettoIS2#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
