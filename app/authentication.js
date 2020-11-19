@@ -1,12 +1,12 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router;
 
-router.post('', async function(req, res){
+router.post('/', async function(req, res){
 
     console.log(req.body.email);
 });
 
-router.get('', function(req, res){ 
+router.get('/', function(req, res){ 
     console.log("email arrivata.");
 });
 
