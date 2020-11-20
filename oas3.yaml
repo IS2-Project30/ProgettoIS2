@@ -6,7 +6,7 @@ info:
   license:
     name: G30
 servers:
-  - url: http://localhost:8000/
+  - url: http://localhost:8888/
     description: Localhost
 paths:
   /login:
@@ -42,14 +42,9 @@ components:
   schemas:
     Utente:
       type: object
-      required:
-        - id
         - username
         - password
       properties:
-        id:
-          type: integer
-          description: 'Id dell utente'
         username:
           type: string
           description: 'Username dell utente'

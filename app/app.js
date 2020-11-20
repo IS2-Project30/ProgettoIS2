@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/', express.static('static'));
 
-//app.use('/authentication', authentication);
+app.use('/authentication', authentication);
 
 app.use((req, res) => { 
     res.status(404);
