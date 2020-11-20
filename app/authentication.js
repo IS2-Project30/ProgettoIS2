@@ -1,12 +1,11 @@
 const express = require('express');
-var mongoose = require('mongoose');
 var User = require('./models/User');
 const router = express.Router();
 
 var cerca = async function(email, pass){
     var res;
     try{
-        res = await User.find({email: email, password: pass}).exec();
+        res = await User.findOne({email: email, password: pass}).exec();
     } catch(err){
         console.log('Errore find');
     }
@@ -24,8 +23,6 @@ var cerca = async function(email, pass){
 }
 
 router.post('/', async function(req, res){
-
-    mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true });
 
     cerca(req.body.email, req.body.password);
 /*  
