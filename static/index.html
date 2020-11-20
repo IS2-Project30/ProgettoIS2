@@ -4,12 +4,13 @@
     <body>
         <h1>Login</h1>
         <form action="/authentication" method="post" name="loginform" id="loginform">  
-            <spman>Logged User:</spman>
+            <span>Logged User:</span>
             <span id="loggedUser"></span>
-            <input name="email" id="loginemail"/>
-            <input >
+            <input type="email" name="email" id="loginemail" required/>
+            <input type="password" name="password" id="password" required/>
             <button type="button" onclick="login()">LogIn</button>
         </form>
+        <p id="errore"></p>
 
         <script src="script.js"></script> 
     </body>
