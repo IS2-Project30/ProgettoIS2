@@ -12,7 +12,8 @@ var userSchema = new mongoose.Schema({
         required: true,
         unique: true,
         min: 6,
-        max: 255
+        max: 255,
+		match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
     password: {
         type: String,

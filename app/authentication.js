@@ -9,7 +9,7 @@ router.post('/', async function(req, res){
         var user = await User.findOne({email: req.body.email}).exec();
     } catch(err){
         console.log("Errore authentication");
-        res.json({success: false, message: "Errore sul db."});
+        res.status(500).json({success: false, message: "Errore sul db."});
         return;
     }
 
@@ -17,13 +17,13 @@ router.post('/', async function(req, res){
 
     // Utente non trovato
     if(!user){
-        res.json({success: false, message: "Autenticazione fallita. Utente non trovato."});
+        res.status(401).json({success: false, message: "Autenticazione fallita. Utente non trovato."});
         return;
     }
 
     // Controllo password
     if(user.password != req.body.password){
-        res.json({success: false, message: "Autenticazione fallita. Password errata."});
+        res.status(401).json({success: false, message: "Autenticazione fallita. Password errata."});
         return;
     }
 
@@ -38,7 +38,7 @@ router.post('/', async function(req, res){
 
     var token = jwt.sign(payload, process.env.SUPER_SECRET, options);
 
-    res.json({
+    res.status(200).json({
         success: true,
         message: 'Autenticazione riuscita!',
         token: token
@@ -48,9 +48,8 @@ router.post('/', async function(req, res){
 
 });
 
-router.get('/', function(req, res){ 
+router.get('/', function(req, res){
     console.log("email arrivata.");
 });
 
 module.exports = router;
-
