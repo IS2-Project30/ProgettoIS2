@@ -2,8 +2,8 @@ const { getMaxListeners } = require("../app/app");
 
 function login(){
 
-    var email = document.getElementById("loginemail");
-    var pass = document.getElementById("password");
+    const email = document.getElementById("loginemail");
+    const pass = document.getElementById("password");
 
     if(!email.checkValidity()){
         document.getElementById("errore").innerHTML = email.validationMessage;
@@ -25,6 +25,16 @@ function login(){
         method:'post',
         headers:{'content-type':'application/json'},
         body:JSON.stringify(a)
+    }).then((resp) => resp.json())
+    .then(function(data){
+        console.log(data); // Dati di risposta da authentication
+        console.log(data.message);
+        console.log(data.success);
+        console.log(data.token);
+        if(data.success){ // Se login andato a buon fine, reindirizza
+             location.href = "./main.html";
+        } else { // Altrimenti stampa errore riscontrato in authentication
+             document.getElementById("errore").innerText = data.message;
+        }
     });
-
 }
