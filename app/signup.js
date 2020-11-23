@@ -17,7 +17,7 @@ router.post("/", (req, res, next) => {
 			});
 
 		}else{
-			console.log("encrypt");
+			
 			//email non trovata, allora è possibile registrarsi
 			//si effettua la criptazione della password
 			bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -27,7 +27,7 @@ router.post("/", (req, res, next) => {
 						error: err
 					});
 				}else{
-					//altrimenti viene creto il nuovo utente
+					//altrimenti viene creato il nuovo utente
 					const newUser = new User({
 						_id: mongoose.Types.ObjectId(),
 						name: req.body.name,
@@ -36,7 +36,7 @@ router.post("/", (req, res, next) => {
 					});
 
 					newUser.save().then( result => {
-						console.log( result)
+						console.log( result);
 						res.status(201).json({
 							message: "utente creato"
 						});
@@ -55,10 +55,6 @@ router.post("/", (req, res, next) => {
 
 
 
-
-
-
-
 module.exports = router;
 
 
@@ -67,4 +63,4 @@ module.exports = router;
 
 
 
-//
+
