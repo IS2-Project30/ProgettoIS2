@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="">
+    </head>
+    <body>
+        <h1>Registrazione</h1>
+        <form name="registrationform" id="registrationform">  
+            <table>
+                <tr>
+                    <td>Nome: </td>
+                    <td><input type="text" name="nome" id="nome" required></td>
+                </tr>
+                <tr>
+                    <td>Email: </td>
+                    <td><input type="email" name="email" id="email" required></td>
+                </tr>
+                <tr>
+                    <td>Password: </td>
+                    <td><input type="password" name="password" id="password" required/></td>
+                </tr>
+            </table>
+            <button type="button" onclick="registrazione()">Registrati</button>
+        </form>
+        <p id="errore"></p>
+
+        <p>
+            <a href="./login.html">Hai già un account?</a>
+        </p>
+
+        <script src="registrazione.js"></script> 
+    </body>
+</html>
