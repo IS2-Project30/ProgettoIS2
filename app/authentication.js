@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('./models/User');
+const bcrypt = require("bcrypt");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
@@ -21,32 +22,39 @@ router.post('/', async function(req, res){
         return;
     }
 
-    // Controllo password
-    if(user.password != req.body.password){
-        res.status(401).json({success: false, message: "Autenticazione fallita. Password errata."});
-        return;
-    }
+	// payload per creazione token
+	var payload = {
+		email: user.email
+	}
 
-    // payload per creazione token
-    var payload = {
-        email: user.email
-    }
-
-    var options = {
+	var options = {
         expiresIn: 86400 // Scade dopo 24 ore
     }
 
-    var token = jwt.sign(payload, process.env.SUPER_SECRET, options);
-
-    res.status(200).json({
-        success: true,
-        message: 'Autenticazione riuscita!',
-        token: token,
-        name: user.name
-    });
-
-//    console.log(req.body.email + " " + req.body.password);
-
+	bcrypt.compare( req.body.password, user.password, (err, result) => {
+		//in caso di errore autenticazione fallita
+		if(err){
+			return res.status(401).json({
+				success: false,
+				message:"Autenticazione fallita"
+			});
+		}
+		//in caso di successo autenticazione avvenuta
+		if(result){
+			const token = jwt.sign( payload, process.env.SUPER_SECRET, options);
+			return res.status(200).json({
+				success: true,
+				message: "Autenticazione riuscita!",
+				token: token,
+				name: user.name
+			});
+		}
+		//altrimenti autenticazione non avvenuta
+		res.status(401).json({
+			success: false,
+			message:"Auth failed"
+		});
+	});
 });
 
 router.get('/', function(req, res){
