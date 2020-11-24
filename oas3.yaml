@@ -9,21 +9,21 @@ servers:
   - url: http://localhost:8888/
     description: Localhost
 paths:
-  /login:
+  /autentication:
     post:
       description: >-
-        Autenticazione delle credenziali.
-      summary: Login di un utente
+        Autenticazione delle credenziali. Necessarie la email e una password.
+      summary: Login utente
       requestBody:
         content:
           application/json:
             schema:
               type: object
               required:
-                - username
+                - email
                 - password
               properties:
-                username:
+                email:
                   type: string
                   description: 'Username dell utente'
                 password:
@@ -36,18 +36,60 @@ paths:
             'Location':
               schema:
                 type: string
-              description: 'Link alla home'
+        '500':
+          description: 'Errore nel server'
+        '401':
+          description: 'Autenticazione fallita'
+        
+  /signup:
+    post:
+      description: >-
+        Iscrizione nuovo utente. Necessaria email non ancora registrata e una password.
+      summary: Iscrizione utente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+                - password
+              properties:
+                username:
+                  type: string
+                  description: 'Username dell utente'
+                email:
+                  type: string
+                  description: 'Email dell utente'
+                password:
+                  type: string
+                  description: 'Password dell utente'
+                
+      responses:
+        '201':
+          description: 'Utente registrato con successo'
+        '500':
+          description: 'Errore registrazione'
+        '409':
+          description: 'Email già registrata'
+        
+        
 
 components:
   schemas:
     Utente:
       type: object
         - username
+        - email
         - password
       properties:
         username:
           type: string
           description: 'Username dell utente'
+        email:
+          type: string
+          description: 'Email dell utente'
         password:
           type: string
           description: 'Password dell utente'
