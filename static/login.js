@@ -32,7 +32,7 @@ function login(){
         console.log(data.success);
         console.log(data.token);
 
-        setCookie(data.token);
+        localStorage.token = data.token;
 
         if(data.success){ // Se login andato a buon fine, reindirizza
              location.href = "./main.html"; // Da modificare, per ora solo per vedere l'effetto
@@ -40,12 +40,4 @@ function login(){
              document.getElementById("errore").innerText = data.message;
         }
     });
-}
-
-function setCookie(token){
-    var now = new Date();
-    var time = now.getTime();
-    time += 3600 * 1000; // Durata 1 ora
-    now.setTime(time);
-    document.cookie = "t=" + token + "; expires=" + now.toUTCString() + "; path=/"; // Set del cookie
 }
