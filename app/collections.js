@@ -2,27 +2,29 @@ const express = require('express');
 const Collection = require('./models/Collection');
 const router = express.Router();
 
+// ottieni tutte le collezioni associate ad un email
 router.get('/', async function(req, res) {
 
     try{
         var coll = await Collection.find({email: req.body.email});
     } catch(err){
-        res.status(500).json("Errore ricerca sul db.");
+        res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
     }
 
     if(!coll){
-        res.status(404).json("Non esistono collezioni.");
+        res.status(404).json({success: false, message: "Non esistono collezioni."});
         return;
     }
 
     var collezioni = coll.map((x) => {return x.name});
 
     console.log(collezioni); // Stampa di prova
-    res.status(200).json(collezioni);
+    res.status(200).json({success: true, collections: collezioni});
 
 });
 
+//crea collezione associata ad un email
 router.post('/', async function(req, res) {
 
     try{
@@ -47,7 +49,7 @@ router.post('/', async function(req, res) {
     try{
         collezione.save();
         console.log('Collezione salvata'); // Stampa di controllo
-        res.status(200).json({success: true, message: "Collezione creata"});
+        res.status(201).json({success: true, message: "Collezione creata"});
     } catch(err){
         console.log('Errore nel salvataggio della collezione');
         res.status(500).json({success: false, message: "Errore salvataggio sul db"});

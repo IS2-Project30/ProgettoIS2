@@ -4,12 +4,13 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
+//effettua login con email e password di un utente registrato
 router.post('/', async function(req, res){
 
     try{
         var user = await User.findOne({email: req.body.email}).exec();
     } catch(err){
-        console.log("Errore authentication");
+        console.log("Errore autenticazione");
         res.status(500).json({success: false, message: "Errore sul db."});
         return;
     }
@@ -44,7 +45,7 @@ router.post('/', async function(req, res){
 			const token = jwt.sign( payload, process.env.SUPER_SECRET, options);
 			return res.status(200).json({
 				success: true,
-				message: "Autenticazione riuscita!",
+				message: "Autenticazione riuscita",
 				token: token,
 				name: user.name
 			});
@@ -52,13 +53,10 @@ router.post('/', async function(req, res){
 		//altrimenti autenticazione non avvenuta
 		res.status(401).json({
 			success: false,
-			message:"Auth failed"
+			message:"Autenticazione fallita"
 		});
 	});
 });
 
-router.get('/', function(req, res){
-    console.log("email arrivata.");
-});
 
 module.exports = router;

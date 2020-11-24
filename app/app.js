@@ -18,7 +18,7 @@ app.use('/collections', collections);
 
 app.use((req, res) => {
     res.status(404);
-    res.json({error: 'Not found'});
+    res.json({success: false, message: 'Non trovato'});
 });
 
 

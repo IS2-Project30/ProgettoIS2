@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("./models/User");
 
-
+//iscrizione nuovo utente
 router.post("/", (req, res, next) => {
 	//Cerca nel db l'email specificata nella request
 	User.find({ email:req.body.email}).exec().then( user => {
@@ -13,18 +13,20 @@ router.post("/", (req, res, next) => {
 		if( user.length >= 1){
 
 			return res.status(409).json({
-				message: "email esistente"
+				success: false,
+				message: "Email già registrata"
 			});
 
 		}else{
-			
+
 			//email non trovata, allora è possibile registrarsi
 			//si effettua la criptazione della password
 			bcrypt.hash(req.body.password, 10, (err, hash) => {
 				//se è avvenuto un errore durante la criptazione, response con error
 				if(err){
 					return res.status(500).json({
-						error: err
+						success: false,
+						message: "Errore:" + err
 					});
 				}else{
 					//altrimenti viene creato il nuovo utente
@@ -38,12 +40,14 @@ router.post("/", (req, res, next) => {
 					newUser.save().then( result => {
 						console.log( result);
 						res.status(201).json({
-							message: "utente creato"
+							success: true,
+							message: "Utente creato"
 						});
 					}).catch( err => {
 						console.log( err);
 						res.status(500).json({
-							error: err
+							success: false,
+							message: "Errore:" + err
 						});
 					});
 				};
@@ -56,11 +60,3 @@ router.post("/", (req, res, next) => {
 
 
 module.exports = router;
-
-
-
-
-
-
-
-
