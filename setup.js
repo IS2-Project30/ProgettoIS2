@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const bcrypt = require("bcrypt");
 var User = require('./app/models/User');
 var Collection = require('./app/models/Collection');
 
@@ -22,41 +23,44 @@ const setup = async function(){
 		console.log(err);
 	}
 
-	const diego = new User({
-		name: 'Diego',
-		email: 'diego@gmail.com',
-		password: '123456'
+	bcrypt.hash('123456', 10, (err, hash) => {
+
+		const diego = new User({
+			name: 'Diego',
+			email: 'diego@gmail.com',
+			password: hash
+		});
+
+		const manuel = new User({
+			name: 'Manuel',
+			email: 'manuel@gmail.com',
+			password: hash
+		});
+
+		const marco = new User({
+			name: 'Marco',
+			email: 'marco@gmail.com',
+			password: hash
+		});
+
+
+		const collezione1 = new Collection({
+			name: 'testCollezione',
+			email: 'marco@gmail.com'
+		});
+
+		try{
+			diego.save();
+			marco.save();
+			manuel.save();
+
+			collezione1.save();
+
+			console.log('Utenti e collezioni salvati correttamente');
+		}catch(err){
+			console.log('Errore nel salvataggio dei utenti.');
+		}
 	});
-
-	const manuel = new User({
-		name: 'Manuel',
-		email: 'manuel@gmail.com',
-		password: '345678'
-	});
-
-	const marco = new User({
-		name: 'Marco',
-		email: 'marco@gmail.com',
-		password: '987654'
-	});
-
-
-	const collezione1 = new Collection({
-		name: 'testCollezione',
-		email: 'marco@gmail.com'
-	});
-
-	try{
-		diego.save();
-		marco.save();
-		manuel.save();
-
-		collezione1.save();
-
-		console.log('Utenti salvati correttamente');
-	}catch(err){
-		console.log('Errore nel salvataggio dei utenti.');
-	}
 }
 
 setup();
