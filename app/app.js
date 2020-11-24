@@ -5,6 +5,7 @@ const app = express();
 const authentication = require('./authentication.js');
 const signup = require("./signup.js");
 const collections = require('./collections.js');
+const tokenChecker = require('./tokenChecker.js');
 
 //Rutes Middlewares
 app.use(express.json());
@@ -14,7 +15,7 @@ app.use('/', express.static('static'));
 
 app.use("/signup", signup);
 app.use('/authentication', authentication);
-app.use('/collections', collections);
+app.use('/collections', tokenChecker, collections);
 
 app.use((req, res) => {
     res.status(404);

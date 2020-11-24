@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', async function(req, res) {
 
     try{
-        var coll = await Collection.find({email: req.body.email});
+        var coll = await Collection.find({email: req.loggedUser.email});
     } catch(err){
         res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
@@ -27,8 +27,13 @@ router.get('/', async function(req, res) {
 //crea collezione associata ad un email
 router.post('/', async function(req, res) {
 
+    if(!req.body.name){
+        res.status(400).json({success: false, message: "Campi body non completi."});
+        return;
+    }
+
     try{
-        var coll = await Collection.findOne({name: req.body.name, email: req.body.email}).exec();
+        var coll = await Collection.findOne({name: req.body.name, email: req.loggedUser.email}).exec();
     } catch(err){
         console.log("Errore ricerca collezione");
         res.status(500).json({success: false, message: "Errore ricerca sul db."});
@@ -43,7 +48,7 @@ router.post('/', async function(req, res) {
 
     const collezione = new Collection({
         name: req.body.name,
-        email: req.body.email
+        email: req.loggedUser.email
     });
 
     try{
