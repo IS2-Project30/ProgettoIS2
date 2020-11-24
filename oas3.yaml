@@ -74,7 +74,43 @@ paths:
         '409':
           description: 'Email già registrata'
         
-        
+  /collections:
+    get:
+      description: >-
+        Ritorna i nomi di tutte le collezioni appartenenti ad un utente.
+      summaty: Ritorna tutte le collezioni
+      responses:
+        '200':
+          description: 'Lista nomi delle collezioni'
+        '404':
+          description: 'Non esistono collezioni associate allo utente'
+        '505':
+          description: 'Errore sul db'
+  
+    post:
+      description: >-
+        Creazione di una nuova collezione. Necessità del nome che l'utente desidera assegnare alla collezione.
+      summary: Creazione collezione
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: 'Nome da assegnare alla collezione'
+      responses:
+        '201':
+          description: 'Collezione creata'
+        '500':
+          description: 'Errore creazione collezione'
+        '400':
+          description: 'Campo name mancante nella request'
+        '409':
+          description: 'Collezione con nome indicato già registrata'       
 
 components:
   schemas:
