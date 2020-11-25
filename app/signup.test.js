@@ -2,6 +2,7 @@ const request = require('supertest');
 const jwt     = require('jsonwebtoken');
 const app     = require('./app');
 const User = require('./models/User');
+const signup = require('./signup');
 const mongoose = require('mongoose');
 
 //--detectOpenHandles
@@ -22,6 +23,31 @@ afterAll( () => {
 	console.log("Connessione database chiusa");
 });
 
+//Generazione stringhe pseudo random
+function randid(length){
+	var result = '';
+	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var charactersLength = characters.length;
+	for( var i=0; i<length; i++){
+		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+}
+
+
+test("POST /signup creazione nuovo utente", () => {
+	let name = randid(7);
+	const user = {email: name+"@gmail.com", name: name, password: name};
+
+	return request(app)
+		.post('/api/v1/signup')
+		.set('Accept', 'application/json')
+		.send(user)	//json nel body
+		.expect(201, {
+			success: true,
+			message: "Utente creato"
+		});
+});
 
 test("POST /signup email già registrata", () => {
 	const user = {email: "manuel@gmail.com", name: "Manuel", password: "123456"};
@@ -83,7 +109,7 @@ test("POST /singup lunghezza password minore di 6 caratteri", () => {
 		});
 });
 
-test("POST /singup lunghezza password minore di 6 caratteri", () => {
+test("POST /singup lunghezza password maggiore di 1024 caratteri", () => {
 	const user = {email: "manuel@gmail.com", name: "Manuel", password: "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"};
 	return request(app)
 		.post('/api/v1/signup')

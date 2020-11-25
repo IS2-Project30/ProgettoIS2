@@ -42,7 +42,6 @@ router.post("/", (req, res, next) => {
 			});
 
 		}else {
-			console.log("LEN PW: " + req.body.password.length);
 			//email non trovata, allora è possibile registrarsi
 			//si effettua la criptazione della password
 			bcrypt.hash(req.body.password, 10, (err, hash) => {
