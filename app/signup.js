@@ -7,6 +7,30 @@ const User = require("./models/User");
 
 //iscrizione nuovo utente
 router.post("/", (req, res, next) => {
+
+	if( !(req.body.password.length >= 6 && req.body.password.length < 1024)){
+		//password di lunghezza non valida
+		return res.status(400).json({
+			success: false,
+			message: "Password troppo corta o troppo lunga."
+		});
+
+	}
+	if(!(req.body.name.length >= 6 && req.body.name.length < 255)){
+		//nome di lunghezza non valida
+		return res.status(400).json({
+			success: false,
+			message: "Nome troppo corto o troppo lungo."
+		});
+	}
+	if(!(req.body.email.length >= 6 && req.body.email.length < 255)){
+		//email di lunghezza non valida
+		return res.status(400).json({
+			success: false,
+			message: "Email troppo corta o troppo lunga."
+		});
+	}
+
 	//Cerca nel db l'email specificata nella request
 	User.find({ email:req.body.email}).exec().then( user => {
 		//se viene trovata una o più email, significa che è già utilizzata
@@ -17,14 +41,7 @@ router.post("/", (req, res, next) => {
 				message: "Email già registrata"
 			});
 
-		}else if( !(req.body.password.length > 6 && req.body.password.length < 1024)){
-			//password di lunghezza non valida
-			return res.status(400).json({
-				success: false,
-				message: "Password troppo corta o troppo lunga."
-			});
-
-		}else{
+		}else {
 			console.log("LEN PW: " + req.body.password.length);
 			//email non trovata, allora è possibile registrarsi
 			//si effettua la criptazione della password

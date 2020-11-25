@@ -1,6 +1,6 @@
 const request = require('supertest');
 const jwt     = require('jsonwebtoken');
-//const app     = require('./app');
+const app     = require('./app');
 const User = require('./models/User');
 const signup = require('./signup');
 const mongoose = require('mongoose');
@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 var conn;
 
 beforeAll( async () => {
-	//jest.setTimeout(8000);
-	//jest.unmock('mongoose');
+	jest.setTimeout(8000);
+	jest.unmock('mongoose');
 	conn = await mongoose.connect(process.env.DB_URL, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true
@@ -25,8 +25,8 @@ afterAll( () => {
 
 
 test("POST /signup email già registrata", () => {
-	const user = {email: "manuel@gmail.com", name: "manuel", password: "123456"};
-	return request(signup)
+	const user = {email: "manuel@gmail.com", name: "Manuel", password: "123456"};
+	return request(app)
 		.post('/api/v1/signup')
 		.set('Accept', 'application/json')
 		.send(user)	//json nel body
@@ -37,8 +37,8 @@ test("POST /signup email già registrata", () => {
 });
 
 test("POST /singup email non valida", () => {
-	const user = {email: "manuelgmail.com", name: "manuel", password: "123456"};
-	return request(signup)
+	const user = {email: "manuelgmail.com", name: "Manuel", password: "123456"};
+	return request(app)
 		.post('/api/v1/signup')
 		.set('Accept', 'application/json')
 		.send(user)	//json nel body
@@ -48,21 +48,33 @@ test("POST /singup email non valida", () => {
 		});
 });
 
-test("POST /singup nome non valido", () => {
-	const user = {email: "manuel@gmail.com", name: "", password: "123456"};
-	return request(signup)
+test("POST /singup email corta", () => {
+	const user = {email: "", name: "Manuel", password: "123456"};
+	return request(app)
 		.post('/api/v1/signup')
 		.set('Accept', 'application/json')
 		.send(user)	//json nel body
 		.expect(400, {
 			success: false,
-			message: "User validation failed: name: Path `name` is required."
+			message: "Email troppo corta o troppo lunga."
+		});
+});
+
+test("POST /singup nome non valido", () => {
+	const user = {email: "manuel@gmail.com", name: "", password: "123456"};
+	return request(app)
+		.post('/api/v1/signup')
+		.set('Accept', 'application/json')
+		.send(user)	//json nel body
+		.expect(400, {
+			success: false,
+			message: "Nome troppo corto o troppo lungo."
 		});
 });
 
 test("POST /singup lunghezza password minore di 6 caratteri", () => {
-	const user = {email: "manuel@gmail.com", name: "manuel", password: ""};
-	return request(signup)
+	const user = {email: "manuel@gmail.com", name: "Manuel", password: ""};
+	return request(app)
 		.post('/api/v1/signup')
 		.set('Accept', 'application/json')
 		.send(user)	//json nel body
@@ -73,8 +85,8 @@ test("POST /singup lunghezza password minore di 6 caratteri", () => {
 });
 
 test("POST /singup lunghezza password minore di 6 caratteri", () => {
-	const user = {email: "manuel@gmail.com", name: "manuel", password: "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"};
-	return request(signup)
+	const user = {email: "manuel@gmail.com", name: "Manuel", password: "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"};
+	return request(app)
 		.post('/api/v1/signup')
 		.set('Accept', 'application/json')
 		.send(user)	//json nel body
