@@ -13,9 +13,9 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/', express.static('static'));
 
-app.use("/signup", signup);
-app.use('/authentication', authentication);
-app.use('/collections', tokenChecker, collections);
+app.use("/api/v1/signup", signup);
+app.use('/api/v1/authentication', authentication);
+app.use('/api/v1/collections', tokenChecker, collections);
 
 app.use((req, res) => {
     res.status(404);

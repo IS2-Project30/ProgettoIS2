@@ -26,7 +26,7 @@ function registrazione(){
 
     //console.log(daRegistrare.name + " " + daRegistrare.email + " " + daRegistrare.password);
 
-    fetch('../signup',{
+    fetch('../api/v1/signup',{
         method:'post',
         headers:{'content-type':'application/json'},
         body:JSON.stringify(daRegistrare)

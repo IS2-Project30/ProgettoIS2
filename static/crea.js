@@ -16,7 +16,7 @@ function crea(){
 
     const coll = {name: nome.value, email: email.value};
 
-    fetch('../collections', {
+    fetch('../api/v1/collections', {
         method:'post',
         headers:{'content-type':'application/json'},
         body:JSON.stringify(coll)

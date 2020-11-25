@@ -21,7 +21,7 @@ function login(){
 
     //console.log(a.email + " " + a.password);
 
-    fetch('../authentication',{
+    fetch('../api/v1/authentication',{
         method:'post',
         headers:{'content-type':'application/json'},
         body:JSON.stringify(a)
