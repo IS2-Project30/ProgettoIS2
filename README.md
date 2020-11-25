@@ -20,3 +20,7 @@ Far partire il setup per popolare il database
 ```shell
 > npm run setup
 ```
+Far partire i test case jest
+```shell
+> npm run test
+```
