@@ -12,7 +12,7 @@ router.get('/', async function(req, res) {
         return;
     }
 
-    if(!coll){
+    if(!(coll !== 'undefined' && coll.length > 0)){
         res.status(404).json({success: false, message: "Non esistono collezioni."});
         return;
     }

@@ -24,3 +24,6 @@ Far partire i test case jest
 ```shell
 > npm run test
 ```
+
+Application deployed on Heroku:
+https://project-group30.herokuapp.com/
