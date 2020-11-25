@@ -43,7 +43,7 @@ test("POST /api/v1/authentication Email corta", () => {
 		.send(user)	//json nel body
 		.expect(400, {
 			success: false,
-			message: "Email troppo corta o troppo lunga."
+			message: "Email scorretta."
 		});
 });
 
@@ -55,7 +55,7 @@ test("POST /api/v1/authentication Lunghezza password minore di 6 caratteri", () 
 		.send(user)	//json nel body
 		.expect(400, {
 			success: false,
-			message: "Password troppo corta o troppo lunga."
+			message: "Password scorretta."
 		});
 });
 

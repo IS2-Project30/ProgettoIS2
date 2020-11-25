@@ -7,20 +7,20 @@ const jwt = require('jsonwebtoken');
 //effettua login con email e password di un utente registrato
 router.post('/', async function(req, res){
 
-    if( !(req.body.password.length >= 6 && req.body.password.length < 1024)){
+    if(!req.body.password || !(req.body.password.length >= 6 && req.body.password.length < 1024)){
         //password di lunghezza non valida
         return res.status(400).json({
             success: false,
-            message: "Password troppo corta o troppo lunga."
+            message: "Password scorretta."
         });
 
     }
 
-    if(!(req.body.email.length >= 6 && req.body.email.length < 255)){
+    if(!req.body.email || !(req.body.email.length >= 6 && req.body.email.length < 255)){
         //email di lunghezza non valida
         return res.status(400).json({
             success: false,
-            message: "Email troppo corta o troppo lunga."
+            message: "Email scorretta."
         });
     }
 

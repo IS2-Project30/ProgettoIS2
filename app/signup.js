@@ -8,7 +8,7 @@ const User = require("./models/User");
 //iscrizione nuovo utente
 router.post("/", (req, res, next) => {
 
-	if( !(req.body.password.length >= 6 && req.body.password.length < 1024)){
+	if(!req.body.password || !(req.body.password.length >= 6 && req.body.password.length < 1024)){
 		//password di lunghezza non valida
 		return res.status(400).json({
 			success: false,
@@ -16,14 +16,14 @@ router.post("/", (req, res, next) => {
 		});
 
 	}
-	if(!(req.body.name.length >= 6 && req.body.name.length < 255)){
+	if(!req.body.name || !(req.body.name.length >= 6 && req.body.name.length < 255)){
 		//nome di lunghezza non valida
 		return res.status(400).json({
 			success: false,
 			message: "Nome troppo corto o troppo lungo."
 		});
 	}
-	if(!(req.body.email.length >= 6 && req.body.email.length < 255)){
+	if(!req.body.email || !(req.body.email.length >= 6 && req.body.email.length < 255)){
 		//email di lunghezza non valida
 		return res.status(400).json({
 			success: false,

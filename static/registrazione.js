@@ -37,7 +37,7 @@ function registrazione(){
         console.log(data.error);
 /*
         if(data.success){ // Se login andato a buon fine, reindirizza
-             location.href = "./main.html"; // Da modificare, per ora solo per vedere l'effetto
+            location.href = "./main.html"; // Da modificare, per ora solo per vedere l'effetto
         } else { // Altrimenti stampa errore riscontrato in authentication
              document.getElementById("errore").innerText = data.error;
         }

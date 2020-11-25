@@ -27,7 +27,7 @@ router.get('/', async function(req, res) {
 //crea collezione associata ad un email
 router.post('/', async function(req, res) {
 
-    if(!req.body.name){
+    if(!req.body.name || !(req.body.name.length >= 6 && req.body.name.length < 255)){
         res.status(400).json({success: false, message: "Campi body non completi."});
         return;
     }
