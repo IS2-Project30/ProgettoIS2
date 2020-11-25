@@ -28,7 +28,7 @@ router.get('/', async function(req, res) {
 router.post('/', async function(req, res) {
 
     if(!req.body.name || !(req.body.name.length >= 6 && req.body.name.length < 255)){
-        res.status(400).json({success: false, message: "Campi body non completi."});
+        res.status(400).json({success: false, message: "Nome non valido."});
         return;
     }
 
@@ -42,7 +42,7 @@ router.post('/', async function(req, res) {
 
     // Una collezione con questo nome esiste già
     if(coll){
-        res.status(409).json({success: false, message: "Una collezione con questo nome esiste già"});
+        res.status(409).json({success: false, message: "Una collezione con questo nome esiste già."});
         return;
     }
 
@@ -54,7 +54,7 @@ router.post('/', async function(req, res) {
     try{
         collezione.save();
         console.log('Collezione salvata'); // Stampa di controllo
-        res.status(201).json({success: true, message: "Collezione creata"});
+        res.status(201).json({success: true, message: "Collezione creata."});
     } catch(err){
         console.log('Errore nel salvataggio della collezione');
         res.status(500).json({success: false, message: "Errore salvataggio sul db"});
