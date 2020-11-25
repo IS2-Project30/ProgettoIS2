@@ -1,5 +1,7 @@
 # ProgettoIS2
 
+[![Build Status](https://travis-ci.org/IS2-Project30/ProgettoIS2.svg?branch=main)](https://travis-ci.org/IS2-Project30/ProgettoIS2)
+
 Progetto Node.js per il corso Ingegneria del software 2
 
 ## Comandi
