@@ -17,8 +17,15 @@ router.post("/", (req, res, next) => {
 				message: "Email già registrata"
 			});
 
-		}else{
+		}else if( !(req.body.password.length > 6 && req.body.password.length < 1024)){
+			//password di lunghezza non valida
+			return res.status(400).json({
+				success: false,
+				message: "Password troppo corta o troppo lunga."
+			});
 
+		}else{
+			console.log("LEN PW: " + req.body.password.length);
 			//email non trovata, allora è possibile registrarsi
 			//si effettua la criptazione della password
 			bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -26,7 +33,7 @@ router.post("/", (req, res, next) => {
 				if(err){
 					return res.status(500).json({
 						success: false,
-						message: "Errore:" + err
+						message: err.message
 					});
 				}else{
 					//altrimenti viene creato il nuovo utente
@@ -44,10 +51,9 @@ router.post("/", (req, res, next) => {
 							message: "Utente creato"
 						});
 					}).catch( err => {
-						console.log( err);
-						res.status(500).json({
+						res.status(400).json({
 							success: false,
-							message: "Errore:" + err
+							message: err.message
 						});
 					});
 				};
