@@ -12,7 +12,7 @@ var objectSchema = new mongoose.Schema({
         required: true
     },
     tag_list: {
-        type: [Tags]
+        type: [ {tag: String, value: String} ]
     }
 });
 
