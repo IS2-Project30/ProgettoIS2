@@ -12,14 +12,15 @@ router.get('/', async function(req, res) {
         return;
     }
 
-    if(!(coll !== 'undefined' && coll.length > 0)){
+    if(!(coll !== undefined && coll.length > 0)){
         res.status(404).json({success: false, message: "Non esistono collezioni."});
         return;
     }
 
-    var collezioni = coll.map((x) => {return x.name});
+	// Aggiungere ritorno dell'id della collezione
+    var collezioni = coll.map((x) => {return {name: x.name, id_coll: x.id}});
 
-    console.log(collezioni); // Stampa di prova
+    console.log("Collezioni tovate: " + collezioni); // Stampa di prova
     res.status(200).json({success: true, collections: collezioni});
 
 });

@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: '1.0'
   title: "Project_30"
-  description: API per eseguire il login.
+  description: API per eseguire il login. (Da modificare)
   license:
     name: G30
 servers:
@@ -38,7 +38,7 @@ paths:
           description: 'Errore input'
         '401':
           description: 'Autenticazione fallita'
-        
+
   /signup:
     post:
       description: >-
@@ -77,11 +77,11 @@ paths:
   /collections:
     get:
       description: >-
-        Ritorna i nomi di tutte le collezioni appartenenti ad un utente.
-      summaty: Ritorna tutte le collezioni
+        Ritorna i nomi e gli id di tutte le collezioni appartenenti ad un utente.
+      summary: Ritorna tutte le collezioni ed il loro id
       responses:
         '200':
-          description: 'Lista nomi delle collezioni'
+          description: 'Lista nomi ed id delle collezioni'
         '404':
           description: 'Non esistono collezioni associate allo utente'
         '500':
@@ -125,28 +125,23 @@ paths:
       description: >-
         Ottenere gli oggetti appartenenti ad una collezione. Necessita di ID collezione.
       summary: Ottenimento oggetti di una collezione
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - id
-              properties:
-                id:
-                  type: string
-                  description: 'ID della collezione'
+      parameters:
+        - in: query
+          name: id_coll
+          required: true
       responses:
         '200':
           description: 'Ritorna la lista degli oggetti appartenenti alla collezine'
-        '500':
-          description: 'Errore sul generico'
+        '400':
+          description: 'Campo id_coll non fornito.'
         '401':
           description: 'Nessun token fornito.'
         '403':
           description: 'Fallimento autenticazione token.'
         '404':
           description: 'Oggetti non trovati'
+        '500':
+          description: 'Errore generico'
 
     post:
       description: >-

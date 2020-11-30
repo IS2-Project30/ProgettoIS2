@@ -2,13 +2,13 @@ var mongoose = require('mongoose');
 
 var objectSchema = new mongoose.Schema({
     name: {
-        type: Sting,
+        type: String,
         required: true,
         min: 1,
         max: 255
     },
-    coll_id: {
-        type: string,
+    id_coll: {
+        type: String,
         required: true
     },
     tag_list: {

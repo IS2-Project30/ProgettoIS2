@@ -23,7 +23,7 @@ const tokenChecker = function(req, res, next) {
 		} else {
 			// if everything is good, save to request for use in other routes
 			req.loggedUser = decoded;
-                        console.log(decoded);
+                        console.log("Decodifica token: " + JSON.stringify(decoded)); // Stampa di controllo
 			next();
 		}
 	});

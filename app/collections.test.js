@@ -37,7 +37,7 @@ test('GET /api/v1/collections Token non più valido, errore intercettato da toke
 });
 
 test("GET /api/v1/collections Nessuna collezione associata all'utente identificato tramite email", () => {
-    const token = jwt.sign({email: 'manuel@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 })
+    const token = jwt.sign({email: 'no_coll@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .get('/api/v1/collections')
         .set('token', token)
