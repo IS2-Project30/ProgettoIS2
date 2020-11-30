@@ -32,12 +32,10 @@ paths:
       responses:
         '201':
           description: 'Utente autenticato. Link alla home della pagina'
-          headers:
-            'Location':
-              schema:
-                type: string
         '500':
           description: 'Errore nel server'
+        '400':
+          description: 'Errore input'
         '401':
           description: 'Autenticazione fallita'
         
@@ -71,6 +69,8 @@ paths:
           description: 'Utente registrato con successo'
         '500':
           description: 'Errore registrazione'
+        '400':
+          description: 'Errore input'
         '409':
           description: 'Email già registrata'
         
@@ -84,8 +84,12 @@ paths:
           description: 'Lista nomi delle collezioni'
         '404':
           description: 'Non esistono collezioni associate allo utente'
-        '505':
+        '500':
           description: 'Errore sul db'
+        '401':
+          description: 'Nessun token fornito.'
+        '403':
+          description: 'Fallimento autenticazione token.'
   
     post:
       description: >-
@@ -110,11 +114,73 @@ paths:
         '400':
           description: 'Campo name mancante nella request'
         '409':
-          description: 'Collezione con nome indicato già registrata'       
+          description: 'Collezione con nome indicato già registrata'
+        '401':
+          description: 'Nessun token fornito.'
+        '403':
+          description: 'Fallimento autenticazione token.'
+
+  /objects:
+    get:
+      description: >-
+        Ottenere gli oggetti appartenenti ad una collezione. Necessita di ID collezione.
+      summary: Ottenimento oggetti di una collezione
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 'ID della collezione'
+      responses:
+        '200':
+          description: 'Ritorna la lista degli oggetti appartenenti alla collezine'
+        '500':
+          description: 'Errore sul generico'
+        '401':
+          description: 'Nessun token fornito.'
+        '403':
+          description: 'Fallimento autenticazione token.'
+        '404':
+          description: 'Oggetti non trovati'
+
+    post:
+      description: >-
+        Creazione di un nuovo oggetto. Necessità ID della collezione e nome dell'oggetto.
+      summary: Creazione oggetto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - name
+              properties:
+                id:
+                  type: string
+                  description: 'ID della collezione'
+                name:
+                  type: string
+                  description: "Nome da assegnare all'oggetto"
+
+      responses:
+        '201':
+          description: 'Oggetto creato'
+        '500':
+          description: 'Errore generico'
+        '400':
+          description: 'Nome scorretto'
+        '404':
+          description: 'Non esiste una collezione con tale id'
 
 components:
   schemas:
-    Utente:
+    User:
       type: object
         - username
         - email
@@ -129,3 +195,14 @@ components:
         password:
           type: string
           description: 'Password dell utente'
+    Collection:
+      type: object
+        - username
+        - email
+      properties:
+        username:
+          type: string
+          description: 'Nome della collezione'
+        email:
+          type: string
+          description: "Email dell'utente associato"
