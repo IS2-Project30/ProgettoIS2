@@ -20,7 +20,7 @@ router.get('/', async function(req, res){
     }
 
     if(!(obj !== undefined && obj.length > 0)){
-        res.status(404).json({success: false, message: "Oggetti non trovati"});
+        res.status(200).json({success: true, message: "Non ci sono oggetti"});
         return;
     }
     console.log("Lista oggetti: " + obj); // Stampa di controllo

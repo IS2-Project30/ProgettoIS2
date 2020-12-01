@@ -47,7 +47,7 @@ test('GET /api/v1/objects Nessun oggetto trovato', () => {
     return request(app)
         .get('/api/v1/objects?id_coll=5fbe86ef4a74553b94f18d15')
         .set('token', token)
-        .expect(404, {success: false, message: "Oggetti non trovati"});
+        .expect(200, {success: true, message: "Non ci sono oggetti"});
 });
 
 test("POST /api/v1/objects Nome per l'oggetto non valido", () => {

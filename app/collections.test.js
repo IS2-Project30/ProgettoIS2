@@ -41,7 +41,7 @@ test("GET /api/v1/collections Nessuna collezione associata all'utente identifica
     return request(app)
         .get('/api/v1/collections')
         .set('token', token)
-        .expect(404, {success: false, message: "Non esistono collezioni."});
+        .expect(200, {success: true, message: "Non esistono collezioni."});
 });
 
 test("GET /api/v1/collections Ottiene array contenente i nomi delle collezioni appartenenti all'utente identificato tramite email", () => {
