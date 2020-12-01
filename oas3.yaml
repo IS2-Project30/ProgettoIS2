@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: '1.0'
   title: "Project_30"
-  description: API per eseguire il login. (Da modificare)
+  description: Queste sono le API utilizzate nella nostra applicazione che consente ad ogni utente di creare delle collezioni di oggetti personalizzate.
   license:
     name: G30
 servers:
@@ -82,14 +82,14 @@ paths:
       responses:
         '200':
           description: 'Lista nomi ed id delle collezioni'
-        '404':
+        '200':
           description: 'Non esistono collezioni associate allo utente'
-        '500':
-          description: 'Errore sul db'
         '401':
           description: 'Nessun token fornito.'
         '403':
           description: 'Fallimento autenticazione token.'
+        '500':
+          description: 'Errore sul db'
   
     post:
       description: >-
@@ -132,14 +132,14 @@ paths:
       responses:
         '200':
           description: 'Ritorna la lista degli oggetti appartenenti alla collezine'
+        '200':
+          description: 'Oggetti non trovati'
         '400':
           description: 'Campo id_coll non fornito.'
         '401':
           description: 'Nessun token fornito.'
         '403':
           description: 'Fallimento autenticazione token.'
-        '404':
-          description: 'Oggetti non trovati'
         '500':
           description: 'Errore generico'
 
@@ -153,10 +153,10 @@ paths:
             schema:
               type: object
               required:
-                - id
+                - id_coll
                 - name
               properties:
-                id:
+                id_coll:
                   type: string
                   description: 'ID della collezione'
                 name:
@@ -183,13 +183,13 @@ components:
       properties:
         username:
           type: string
-          description: 'Username dell utente'
+          description: "Username dell'utente"
         email:
           type: string
-          description: 'Email dell utente'
+          description: "Email dell'utente"
         password:
           type: string
-          description: 'Password dell utente'
+          description: "Password dell'utente"
     Collection:
       type: object
         - username
@@ -201,3 +201,18 @@ components:
         email:
           type: string
           description: "Email dell'utente associato"
+    Object:
+      type: object
+        - name
+        - id_coll
+        - tag_list
+      properties:
+        name:
+          type: String
+          description: "Nome dell'oggetto"
+        id_coll:
+          type: String
+          description: "Id della collezione a cui appartiene l'oggetto"
+        tag_list:
+          type: [ {tag: String, value: String} ]
+          description: "Array contenente tutti i tag e relativi valori appartenenti all'oggetto"
