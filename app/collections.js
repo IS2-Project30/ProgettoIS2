@@ -1,6 +1,7 @@
 const express = require('express');
 const ObjectID = require ('mongodb').ObjectID;
 const Collection = require('./models/Collection');
+const Obj = require('./models/Object');
 const router = express.Router();
 
 // ottieni tutte le collezioni associate ad un email
@@ -81,6 +82,7 @@ router.delete('/', async function(req, res) {
     }
 
     try{
+        await Obj.deleteMany({id_coll: req.body.id_coll});
         await Collection.deleteOne({_id: id_coll});
         console.log('Collezione id: ' + req.body.id_coll + ' eliminata'); // Stampa di controllo
         res.status(200).json({success: true, message: "Collezione eliminata."});

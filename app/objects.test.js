@@ -96,7 +96,7 @@ test('POST /api/v1/objects Oggetto creato correttamente', () => {
         .post('/api/v1/objects')
         .set('token', token)
         .set('content-type', 'application/json')
-        .send({id_coll: '5fbe86ef4a74553b94f18d15', name: 'OggettoTest'})
+        .send({id_coll: '5fc7a34d1484ec06a4d8812d', name: 'OggettoTest'})
         .expect(201, {success: true, message: "Oggetto creato."});
 });
 
@@ -128,7 +128,7 @@ test('GET /api/v1/objects Restituisce tutti gli oggetti appartenenti ad una clas
 });
 // DA TENERE SOTTO OSSERVAZIONE
 test('DELETE /api/v1/objects Campo id_obj errato', async () => {
-    const id = await Obj.findOne({name: 'OggettoTest', id_coll: '5fbe86ef4a74553b94f18d15'});
+    const id = await Obj.findOne({name: 'OggettoTest', id_coll: '5fc7a34d1484ec06a4d8812d'});
     const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .delete('/api/v1/objects')
