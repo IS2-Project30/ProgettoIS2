@@ -14,7 +14,7 @@ beforeAll( async () => {
 });
 
 afterAll( async () => {
-    //const result = await Collection.remove({name: 'CollezioneTest', email: 'marco@gmail.com'}); // Decommentare se delete 200 commentata
+    //const result = await Collection.remove({name: 'CollezioneTest', email: 'test@test.it'}); // Decommentare se delete 200 commentata
     mongoose.connection.close(true);
     console.log('Database disconnesso');
 });
@@ -26,7 +26,7 @@ test('GET /api/v1/collections Errore per mancanza di token negli header, errore 
 });
 
 test('GET /api/v1/collections Token non più valido, errore intercettato da tokenChecker', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: -10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: -10 });
     return request(app)
         .get('/api/v1/collections')
         .set('token', token)
@@ -34,7 +34,7 @@ test('GET /api/v1/collections Token non più valido, errore intercettato da toke
 });
 
 test("GET /api/v1/collections Nessuna collezione associata all'utente identificato tramite email", () => {
-    const token = jwt.sign({email: 'no_coll@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'no_coll@gmail.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .get('/api/v1/collections')
         .set('token', token)
@@ -42,7 +42,7 @@ test("GET /api/v1/collections Nessuna collezione associata all'utente identifica
 });
 
 test("GET /api/v1/collections Ottiene array contenente i nomi delle collezioni appartenenti all'utente identificato tramite email", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .get('/api/v1/collections')
         .set('token', token)
@@ -50,7 +50,7 @@ test("GET /api/v1/collections Ottiene array contenente i nomi delle collezioni a
 });
 
 test("POST /api/v1/collections Nome per la collezione non valido", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .post('/api/v1/collections')
         .set('token', token)
@@ -60,7 +60,7 @@ test("POST /api/v1/collections Nome per la collezione non valido", () => {
 });
 
 test("POST /api/v1/collections Crea una collezione con nome indicato", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .post('/api/v1/collections')
         .set('token', token)
@@ -70,17 +70,17 @@ test("POST /api/v1/collections Crea una collezione con nome indicato", () => {
 });
 
 test("POST /api/v1/collections Una collezione col nome indicato esiste già", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .post('/api/v1/collections')
         .set('token', token)
         .set('content-type', 'application/json')
-        .send({name: 'CollezioneTest'})
+        .send({name: 'CollezioneTest1'})
         .expect(409, {success: false, message: "Una collezione con questo nome esiste già."});
 });
 
 test("DELETE /api/v1/collections Campo id_coll non fornito", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .delete('/api/v1/collections')
         .set('token', token)
@@ -89,7 +89,7 @@ test("DELETE /api/v1/collections Campo id_coll non fornito", () => {
 });
 
 test("DELETE /api/v1/collections Campo id_coll errato", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .delete('/api/v1/collections')
         .set('token', token)
@@ -99,8 +99,8 @@ test("DELETE /api/v1/collections Campo id_coll errato", () => {
 });
 // DA TENERE SOTTO OSSERVAZIONE
 test("DELETE /api/v1/collections Collezione eliminata", async () => {
-    const id = await Collection.findOne({name: 'CollezioneTest', email: 'marco@gmail.com'});
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const id = await Collection.findOne({name: 'CollezioneTest', email: 'test@test.it'});
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .delete('/api/v1/collections')
         .set('token', token)

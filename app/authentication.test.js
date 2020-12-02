@@ -27,7 +27,7 @@ test('POST /api/v1/authentication Utente non trovato', () => {
 });
 
 test('POST /api/v1/authentication Password non corretta', () => {
-    let user = {email: 'marco@gmail.com', password: 'nonesiste'};
+    let user = {email: 'test@test.it', password: 'nonesiste'};
     return request(app)
        .post('/api/v1/authentication')
        .set('content-type', 'application/json')
@@ -48,7 +48,7 @@ test("POST /api/v1/authentication Email corta", () => {
 });
 
 test("POST /api/v1/authentication Lunghezza password minore di 6 caratteri", () => {
-	let user = {email: 'marco@gmail.com', password: ''};
+	let user = {email: 'test@test.it', password: ''};
 	return request(app)
 		.post('/api/v1/authentication')
 		.set('Accept', 'application/json')
@@ -60,8 +60,8 @@ test("POST /api/v1/authentication Lunghezza password minore di 6 caratteri", () 
 });
 
 //Autenticazione riuscita, ovviamente il successo di questo test dipende dal fatto che l'utente sia già presente sul db
-test('POST /api/v1/authentication Autentucazione avvenuta', () => {
-    let user = {email: 'marco@gmail.com', password: '987654'};
+test('POST /api/v1/authentication Autenticazione avvenuta', () => {
+    let user = {email: 'test@test.it', password: 'passwordtest'};
     return request(app)
        .post('/api/v1/authentication')
        .set('content-type', 'application/json')

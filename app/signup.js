@@ -61,7 +61,7 @@ router.post("/", (req, res, next) => {
 					});
 
 					newUser.save().then( result => {
-						console.log( result);
+						console.log("Utente: " +  result.name + " creato");
 						res.status(201).json({
 							success: true,
 							message: "Utente creato"

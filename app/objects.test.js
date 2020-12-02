@@ -5,6 +5,9 @@ const Obj = require('./models/Object');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
+const id_coll_obj = "5fc7ee8a2b95d70adc1a7ffb"; // id di CollezioneTest1
+const id_coll_vuota = "5fc7ee8f2b95d70adc1a7ffc"; // id di CollezioneTest2
+
 let connections;
 
 beforeAll( async () => {
@@ -15,7 +18,7 @@ beforeAll( async () => {
 });
 
 afterAll( async () => {
-    //const result = await Obj.deleteOne({name: 'OggettoTest', id_coll: '5fbe86ef4a74553b94f18d15'}); // Decommentare se delete 200 commentata
+    //const result = await Obj.deleteOne({name: 'OggettoTest', id_coll: id_coll_vuota}); // Decommentare se delete 200 commentata
     mongoose.connection.close(true);
     console.log('Database disconnesso');
 });
@@ -27,7 +30,7 @@ test('GET /api/v1/objects Errore per mancanza di token negli header, errore inte
 });
 
 test('GET /api/v1/objects Token non più valido, errore intercettato da tokenChecker', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: -10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: -10 });
     return request(app)
         .get('/api/v1/objects')
         .set('token', token)
@@ -35,7 +38,7 @@ test('GET /api/v1/objects Token non più valido, errore intercettato da tokenChe
 });
 
 test('GET /api/v1/objects Campo id_coll non compilato', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .get('/api/v1/objects')
         .set('token', token)
@@ -43,25 +46,25 @@ test('GET /api/v1/objects Campo id_coll non compilato', () => {
 });
 
 test('GET /api/v1/objects Nessun oggetto trovato', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
-        .get('/api/v1/objects?id_coll=5fbe86ef4a74553b94f18d15')
+        .get('/api/v1/objects?id_coll=' + id_coll_vuota)
         .set('token', token)
         .expect(200, {success: true, message: "Non ci sono oggetti"});
 });
 
 test("POST /api/v1/objects Nome per l'oggetto non valido", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .post('/api/v1/objects')
         .set('token', token)
         .set('content-type', 'application/json')
-        .send({id_coll: '5fbe86ef4a74553b94f18d15', name: ''})
+        .send({id_coll: id_coll_vuota, name: ''})
         .expect(400, {success: false, message: "Nome non valido."});
 });
 
 test('POST /api/v1/objects id_coll mancante', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .post('/api/v1/objects')
         .set('token', token)
@@ -71,7 +74,7 @@ test('POST /api/v1/objects id_coll mancante', () => {
 });
 
 test("POST /api/v1/objects id_coll non rispetta la forma corretta", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .post('/api/v1/objects')
         .set('token', token)
@@ -81,27 +84,27 @@ test("POST /api/v1/objects id_coll non rispetta la forma corretta", () => {
 });
 
 test("POST /api/v1/objects id_coll corretto ma non esistente", () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .post('/api/v1/objects')
         .set('token', token)
         .set('content-type', 'application/json')
-        .send({id_coll: '5fbe86ef4a72543b94f18d15', name: 'OggettoTest'})
+        .send({id_coll: '1aa1aa1a1a11a11aaa1a1aaa', name: 'OggettoTest'})
         .expect(404, {success: false, message: "Non esiste una collezione con tale id."});
 });
 
 test('POST /api/v1/objects Oggetto creato correttamente', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .post('/api/v1/objects')
         .set('token', token)
         .set('content-type', 'application/json')
-        .send({id_coll: '5fc7a34d1484ec06a4d8812d', name: 'OggettoTest'})
+        .send({id_coll: id_coll_vuota, name: 'OggettoTest'})
         .expect(201, {success: true, message: "Oggetto creato."});
 });
 
 test('DELETE /api/v1/objects Campo id_obj non fornito', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .delete('/api/v1/objects')
         .set('token', token)
@@ -110,7 +113,7 @@ test('DELETE /api/v1/objects Campo id_obj non fornito', () => {
 });
 
 test('DELETE /api/v1/objects Campo id_obj errato', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .delete('/api/v1/objects')
         .set('token', token)
@@ -119,17 +122,17 @@ test('DELETE /api/v1/objects Campo id_obj errato', () => {
         .expect(400, {success: false, message: 'id_obj errato.'});
 });
 // DA TENERE SOTTO OSSERVAZIONE
-test('GET /api/v1/objects Restituisce tutti gli oggetti appartenenti ad una classe', () => {
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+test('GET /api/v1/objects Restituisce tutti gli oggetti appartenenti ad una collezione', () => {
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
-        .get('/api/v1/objects?id_coll=fbe86ef4a74553b94f18d15')
+        .get('/api/v1/objects?id_coll=' + id_coll_obj)
         .set('token', token)
         .expect(200); 
 });
 // DA TENERE SOTTO OSSERVAZIONE
-test('DELETE /api/v1/objects Campo id_obj errato', async () => {
-    const id = await Obj.findOne({name: 'OggettoTest', id_coll: '5fc7a34d1484ec06a4d8812d'});
-    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+test('DELETE /api/v1/objects Oggetto eliminato correttamente', async () => { // Elimina oggetto creato nel precedente test
+    const id = await Obj.findOne({name: 'OggettoTest', id_coll: id_coll_vuota});
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
         .delete('/api/v1/objects')
         .set('token', token)
