@@ -110,4 +110,63 @@ router.delete('/', async function(req, res) {
 
 });
 
+/*	Formato msg http per patch object
+	{
+		tag_list: [
+			{"tag": "nometag", "value": "valoretag"},
+			{"tag": "nometag2", "value": "valoretag2"}
+		],
+		"token": "valore token"
+	}
+*/
+//modifica di un Oggetto, aggiunta delle tags
+router.patch('/:objectId', async function(req, res){
+	const req_tag_list = req.body.tag_list;
+	var objectId;
+	var oggetto;
+
+	// Converto la stringa objectId in oggetto ObjectID
+    try{
+        objectId = ObjectID.createFromHexString(req.params.objectId);
+    } catch(err){
+        res.status(400).json({success: false, message: "objectId errato."});
+        return;
+    }
+
+	//creazione lista di oggetti conformi al modello
+	var nuoviTags = [];
+	for( i=0; i<req_tag_list.length; i++){
+		nuoviTags[i] = {
+			"tag": req_tag_list[i].tag,
+			"value": req_tag_list[i].value
+		}
+	}
+
+	//ricerca nel db dell'oggetto indicato
+	try{
+        oggetto = await Obj.findById(objectId).exec();
+    } catch(err){
+        res.status(500).json({success: false, message: "Errore ricerca sul db."});
+        return;
+    }
+
+	//se ricercato un oggetto che non esiste
+	if( !oggetto){
+		res.status(404).json({success: false, message: "Non esiste un oggetto con tale id."});
+        return;
+	}
+
+	try{
+		await Obj.findOneAndUpdate( JSON.stringify(objectId), {
+			$push: {tag_list: nuoviTags} }, {
+			new: true
+		});
+	}catch(err){
+		res.status(500).json({success: false, message: "Errore update sul db."});
+        return;
+	}
+
+	res.status(200).json({success: true, message: "Lista di tag aggiornata"});
+});
+
 module.exports = router;

@@ -2,9 +2,9 @@ const app = require('./app/app.js');
 var mongoose = require('mongoose');
 
 //Connect to DB
-mongoose.connect(process.env.DB_URL,{ useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.DB_URL,{ useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 .then( () => {
-    
+
     console.log('Connected to Database!')
 
     //Start server
