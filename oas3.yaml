@@ -63,7 +63,6 @@ paths:
                 password:
                   type: string
                   description: 'Password dell utente'
-                
       responses:
         '201':
           description: 'Utente registrato con successo'
@@ -90,7 +89,7 @@ paths:
           description: 'Fallimento autenticazione token.'
         '500':
           description: 'Errore sul db'
-
+  
     post:
       description: >-
         Creazione di una nuova collezione. Necessità del nome che l'utente desidera assegnare alla collezione.
@@ -108,13 +107,13 @@ paths:
                   description: 'Nome da assegnare alla collezione'
       responses:
         '201':
-          description: 'Collezione creata.'
+          description: 'Collezione creata'
         '500':
-          description: 'Errore creazione collezione.'
+          description: 'Errore creazione collezione'
         '400':
-          description: 'Campo name mancante nella request.'
+          description: 'Campo name mancante nella request'
         '409':
-          description: 'Collezione con nome indicato già registrata.'
+          description: 'Collezione con nome indicato già registrata'
         '401':
           description: 'Nessun token fornito.'
         '403':
@@ -135,7 +134,7 @@ paths:
                 id_coll:
                   type: string
                   description: 'Id della collezione da eliminare'
-      response:
+      responses:
         '200':
           description: 'Collezione elimitata.'
         '400':
@@ -144,6 +143,7 @@ paths:
           description: 'id_coll errato.'
         '500':
           description: 'Errore sul db.'
+
 
   /objects:
     get:
@@ -189,13 +189,13 @@ paths:
                   description: "Nome da assegnare all'oggetto"
       responses:
         '201':
-          description: 'Oggetto creato.'
+          description: 'Oggetto creato'
         '500':
-          description: 'Errore generico.'
+          description: 'Errore generico'
         '400':
-          description: 'Nome scorretto.'
+          description: 'Nome scorretto'
         '404':
-          description: 'Non esiste una collezione con tale id.'
+          description: 'Non esiste una collezione con tale id'
 
     delete:
       description: >-
@@ -211,8 +211,8 @@ paths:
               properties:
                 id_obj:
                   type: string
-                  description: 'Id dell'oggetto da eliminare'
-      response:
+                  description: "Id dell'oggetto da eliminare"
+      responses:
         '200':
           description: 'Oggetto elimitato.'
         '400':
