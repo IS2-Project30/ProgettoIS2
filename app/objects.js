@@ -75,7 +75,7 @@ router.post('/', async function(req, res){
     try{
         obj.save();
         console.log('Oggetto ' + JSON.stringify(obj) + ' salvato'); // Stampa di controllo
-        res.status(201).json({success: true, message: "Oggetto creato."});
+        res.status(201).json({success: true, message: "Oggetto creato.", id_obj: obj._id});
     } catch(err){
         console.log("Errore salvataggio dell'oggetto"); // Stampa di controllo
         res.status(500).json({success: false, message: "Errore salvataggio dell'oggetto"});

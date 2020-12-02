@@ -56,7 +56,7 @@ router.post('/', async function(req, res) {
     try{
         collezione.save();
         console.log('Collezione salvata' + JSON.stringify(collezione)); // Stampa di controllo
-        res.status(201).json({success: true, message: "Collezione creata."});
+        res.status(201).json({success: true, message: "Collezione creata.", id_coll: collezione._id});
     } catch(err){
         console.log('Errore nel salvataggio della collezione');
         res.status(500).json({success: false, message: "Errore salvataggio sul db"});

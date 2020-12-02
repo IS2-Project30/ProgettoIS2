@@ -66,7 +66,7 @@ test("POST /api/v1/collections Crea una collezione con nome indicato", () => {
         .set('token', token)
         .set('content-type', 'application/json')
         .send({name: 'CollezioneTest'})
-        .expect(201, {success: true, message: "Collezione creata."});
+        .expect(201);
 });
 
 test("POST /api/v1/collections Una collezione col nome indicato esiste già", () => {

@@ -100,7 +100,7 @@ test('POST /api/v1/objects Oggetto creato correttamente', () => {
         .set('token', token)
         .set('content-type', 'application/json')
         .send({id_coll: id_coll_vuota, name: 'OggettoTest'})
-        .expect(201, {success: true, message: "Oggetto creato."});
+        .expect(201);
 });
 
 test('DELETE /api/v1/objects Campo id_obj non fornito', () => {
