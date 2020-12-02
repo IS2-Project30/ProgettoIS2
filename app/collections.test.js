@@ -1,6 +1,3 @@
-
-// INCOMPLETA.
-
 const request = require('supertest');
 const app = require('./app');
 const Collection = require('./models/Collection');
@@ -17,7 +14,7 @@ beforeAll( async () => {
 });
 
 afterAll( async () => {
-    const result = await Collection.remove({name: 'CollezioneTest', email: 'marco@gmail.com'});
+    //const result = await Collection.remove({name: 'CollezioneTest', email: 'marco@gmail.com'}); // Decommentare se delete 200 commentata
     mongoose.connection.close(true);
     console.log('Database disconnesso');
 });
@@ -80,4 +77,34 @@ test("POST /api/v1/collections Una collezione col nome indicato esiste già", ()
         .set('content-type', 'application/json')
         .send({name: 'CollezioneTest'})
         .expect(409, {success: false, message: "Una collezione con questo nome esiste già."});
+});
+
+test("DELETE /api/v1/collections Campo id_coll non fornito", () => {
+    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    return request(app)
+        .delete('/api/v1/collections')
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .expect(400, {success: false, message: 'id_coll mancante.'});
+});
+
+test("DELETE /api/v1/collections Campo id_coll errato", () => {
+    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    return request(app)
+        .delete('/api/v1/collections')
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_coll: '2questo79id638è51errato03'})
+        .expect(400, {success: false, message: 'id_coll errato.'});
+});
+// DA TENERE SOTTO OSSERVAZIONE
+test("DELETE /api/v1/collections Collezione eliminata", async () => {
+    const id = await Collection.findOne({name: 'CollezioneTest', email: 'marco@gmail.com'});
+    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    return request(app)
+        .delete('/api/v1/collections')
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_coll: id._id})
+        .expect(200, {success: true, message: 'Collezione eliminata.'});
 });

@@ -1,4 +1,5 @@
 const express = require('express');
+const ObjectID = require ('mongodb').ObjectID;
 const Collection = require('./models/Collection');
 const router = express.Router();
 
@@ -53,11 +54,38 @@ router.post('/', async function(req, res) {
 
     try{
         collezione.save();
-        console.log('Collezione salvata'); // Stampa di controllo
+        console.log('Collezione salvata' + JSON.stringify(collezione)); // Stampa di controllo
         res.status(201).json({success: true, message: "Collezione creata."});
     } catch(err){
         console.log('Errore nel salvataggio della collezione');
         res.status(500).json({success: false, message: "Errore salvataggio sul db"});
+    }
+
+});
+
+// Eliminare una collezione
+router.delete('/', async function(req, res) {
+
+    // Controllo se è stato inserito l'id della collezione
+    if(!req.body.id_coll){
+        res.status(400).json({success: false, message: "id_coll mancante."});
+        return;
+    }
+
+    // Converto la stringa id_coll in oggetto ObjectID
+    try{
+        var id_coll = ObjectID.createFromHexString(req.body.id_coll);
+    } catch(err){
+        res.status(400).json({success: false, message: "id_coll errato."});
+        return;
+    }
+
+    try{
+        await Collection.deleteOne({_id: id_coll});
+        console.log('Collezione id: ' + req.body.id_coll + ' eliminata'); // Stampa di controllo
+        res.status(200).json({success: true, message: "Collezione eliminata."});
+    } catch(err){
+        res.status(500).json({success: false, message: "Errore sul db."});
     }
 
 });

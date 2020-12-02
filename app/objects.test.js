@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('./app');
 const Collection = require('./models/Collection');
-const Object = require('./models/Object');
+const Obj = require('./models/Object');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
@@ -15,7 +15,7 @@ beforeAll( async () => {
 });
 
 afterAll( async () => {
-    const result = await Object.remove({name: 'OggettoTest', id_coll: '5fbe86ef4a74553b94f18d15'});
+    //const result = await Obj.deleteOne({name: 'OggettoTest', id_coll: '5fbe86ef4a74553b94f18d15'}); // Decommentare se delete 200 commentata
     mongoose.connection.close(true);
     console.log('Database disconnesso');
 });
@@ -99,7 +99,26 @@ test('POST /api/v1/objects Oggetto creato correttamente', () => {
         .send({id_coll: '5fbe86ef4a74553b94f18d15', name: 'OggettoTest'})
         .expect(201, {success: true, message: "Oggetto creato."});
 });
-/* DA RIVEDERE
+
+test('DELETE /api/v1/objects Campo id_obj non fornito', () => {
+    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    return request(app)
+        .delete('/api/v1/objects')
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .expect(400, {success: false, message: 'id_obj mancante.'});
+});
+
+test('DELETE /api/v1/objects Campo id_obj errato', () => {
+    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    return request(app)
+        .delete('/api/v1/objects')
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_obj: '6questo83id131è38errato89'})
+        .expect(400, {success: false, message: 'id_obj errato.'});
+});
+// DA TENERE SOTTO OSSERVAZIONE
 test('GET /api/v1/objects Restituisce tutti gli oggetti appartenenti ad una classe', () => {
     const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
@@ -107,4 +126,14 @@ test('GET /api/v1/objects Restituisce tutti gli oggetti appartenenti ad una clas
         .set('token', token)
         .expect(200); 
 });
-*/
+// DA TENERE SOTTO OSSERVAZIONE
+test('DELETE /api/v1/objects Campo id_obj errato', async () => {
+    const id = await Obj.findOne({name: 'OggettoTest', id_coll: '5fbe86ef4a74553b94f18d15'});
+    const token = jwt.sign({email: 'marco@gmail.com'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    return request(app)
+        .delete('/api/v1/objects')
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_obj: id._id})
+        .expect(200, {success: true, message: 'Oggetto eliminato.'});
+});

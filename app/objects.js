@@ -1,7 +1,7 @@
 const express = require('express');
-const ObjectID = require ('mongodb').ObjectID
+const ObjectID = require ('mongodb').ObjectID;
 const Collection = require('./models/Collection');
-const Object = require('./models/Object');
+const Obj = require('./models/Object');
 const router = express.Router();
 
 // Ottieni tutti gli oggetti associati ad una collezione, id_coll passato tramite query
@@ -13,7 +13,7 @@ router.get('/', async function(req, res){
     }
 
     try{
-        var obj = await Object.find({id_coll: req.query.id_coll});
+        var obj = await Obj.find({id_coll: req.query.id_coll});
     } catch(err){
         res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
@@ -66,7 +66,7 @@ router.post('/', async function(req, res){
     }
 
     // Creo l'oggetto da salvare, AGGINGERE tag_list
-    const obj = new Object({
+    const obj = new Obj({
         name: req.body.name,
         id_coll: req.body.id_coll
     });
@@ -79,6 +79,33 @@ router.post('/', async function(req, res){
     } catch(err){
         console.log("Errore salvataggio dell'oggetto"); // Stampa di controllo
         res.status(500).json({success: false, message: "Errore salvataggio dell'oggetto"});
+    }
+
+});
+
+// Eliminare un oggetto
+router.delete('/', async function(req, res) {
+
+    // Controllo se è stato inserito l'id del'oggetto
+    if(!req.body.id_obj){
+        res.status(400).json({success: false, message: "id_obj mancante."});
+        return;
+    }
+
+    // Converto la stringa id_obj in oggetto ObjectID
+    try{
+        var id_obj = ObjectID.createFromHexString(req.body.id_obj);
+    } catch(err){
+        res.status(400).json({success: false, message: "id_obj errato."});
+        return;
+    }
+
+    try{
+        await Obj.deleteOne({_id: id_obj});
+        console.log('Oggetto id: ' + req.body.id_obj + ' eliminato.'); // Stampa di controllo
+        res.status(200).json({success: true, message: "Oggetto eliminato."});
+    } catch(err){
+        res.status(500).json({success: false, message: "Errore sul db."});
     }
 
 });
