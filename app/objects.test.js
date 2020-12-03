@@ -103,6 +103,54 @@ test('POST /api/v1/objects Oggetto creato correttamente', () => {
         .expect(201);
 });
 
+test('PATCH /api/v1/objects/:objectId modifica avvenuta con successo', async () => {
+	const id = await Obj.findOne({name: 'ObjectTest1', id_coll: '5fc7ee8a2b95d70adc1a7ffb'});
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	const lista = { tag_list: [{"tag": "test tag", "valore": "test valore"}] };
+	return request(app)
+        .patch('/api/v1/objects/' + id._id)
+		.set('token', token)
+        .set('content-type', 'application/json')
+        .send(lista)
+        .expect(201, {success: true, message: "Lista di tag aggiornata."});
+});
+
+test('PATCH /api/v1/objects/:objectId campo tag_list assente o non valido', async () => {
+	const id = await Obj.findOne({name: 'ObjectTest1', id_coll: '5fc7ee8a2b95d70adc1a7ffb'});
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	const lista = { "tag": "test tag", "valore": "test valore" };
+	return request(app)
+        .patch('/api/v1/objects/' + id._id)
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send(lista)
+        .expect(400, {success: false, message: "Non esiste tag_list o vi son errori di sintassi."});
+});
+
+test('PATCH /api/v1/objects/:objectId con objectId non valido', async () => {
+	const id = 'hgah9q283hg194hg9ahq';
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	const lista = { tag_list: [{"tag": "test tag", "valore": "test valore"}] };
+	return request(app)
+        .patch('/api/v1/objects/' + id)
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send(lista)
+        .expect(400, {success: false, message: "objectId errato."});
+});
+
+test('PATCH /api/v1/objects/:objectId tag presente ma vuoto', async () => {
+	const id = await Obj.findOne({name: 'setupObject', id_coll: 'diSetup'});
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	const lista = { tag_list: [{"tag": "", "valore": "test valore"}] };
+	return request(app)
+        .patch('/api/v1/objects/' + id._id)
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send(lista)
+        .expect(400, {success: false, message: "I campi tag non possono essere vuoti."});
+});
+
 test('DELETE /api/v1/objects Campo id_obj non fornito', () => {
     const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
@@ -127,7 +175,7 @@ test('GET /api/v1/objects Restituisce tutti gli oggetti appartenenti ad una coll
     return request(app)
         .get('/api/v1/objects?id_coll=' + id_coll_obj)
         .set('token', token)
-        .expect(200); 
+        .expect(200);
 });
 // DA TENERE SOTTO OSSERVAZIONE
 test('DELETE /api/v1/objects Oggetto eliminato correttamente', async () => { // Elimina oggetto creato nel precedente test

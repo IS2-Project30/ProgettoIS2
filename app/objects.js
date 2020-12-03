@@ -114,7 +114,8 @@ router.delete('/', async function(req, res) {
 	{
 		tag_list: [
 			{"tag": "nometag", "value": "valoretag"},
-			{"tag": "nometag2", "value": "valoretag2"}
+			{"tag": "nometag2", "value": "valoretag2"},
+			{"hfuasho"}
 		],
 		"token": "valore token"
 	}
@@ -125,6 +126,12 @@ router.patch('/:objectId', async function(req, res){
 	var objectId;
 	var oggetto;
 
+	//tag_list non valida
+	if( !req_tag_list){
+		res.status(400).json({success: false, message: "Non esiste tag_list o vi son errori di sintassi."});
+        return;
+	}
+
 	// Converto la stringa objectId in oggetto ObjectID
     try{
         objectId = ObjectID.createFromHexString(req.params.objectId);
@@ -132,15 +139,6 @@ router.patch('/:objectId', async function(req, res){
         res.status(400).json({success: false, message: "objectId errato."});
         return;
     }
-
-	//creazione lista di oggetti conformi al modello
-	var nuoviTags = [];
-	for( i=0; i<req_tag_list.length; i++){
-		nuoviTags[i] = {
-			"tag": req_tag_list[i].tag,
-			"value": req_tag_list[i].value
-		}
-	}
 
 	//ricerca nel db dell'oggetto indicato
 	try{
@@ -156,6 +154,35 @@ router.patch('/:objectId', async function(req, res){
         return;
 	}
 
+	//creazione lista di oggetti conformi al modello e controllo tag
+	var nuoviTags = [];
+	for( i=0; i<req_tag_list.length; i++){
+
+		//se è presente il campo "tag"
+		if( req_tag_list[i].hasOwnProperty("tag")){
+
+			//se il campo tag è nullo o vuoto restituisco un errore
+			if( !req_tag_list[i]["tag"] || req_tag_list[i]["tag"] === ""){
+				res.status(400).json({success: false, message: "I campi tag non possono essere vuoti."});
+				return;
+
+			}else{	//se tag non è nullo o vuoto
+				//controllo il campo value che è comunque facoltativo
+				if( req_tag_list[i].hasOwnProperty("value")){
+					nuoviTags[i] = {
+						"tag": req_tag_list[i].tag,
+						"value": req_tag_list[i].value
+					}
+				}else{
+					nuoviTags[i] = {
+						"tag": req_tag_list[i].tag
+					}
+				}
+			}
+		}
+	}
+
+	// applicazione modifiche
 	try{
 		await Obj.findOneAndUpdate( JSON.stringify(objectId), {
 			$push: {tag_list: nuoviTags} }, {
@@ -166,7 +193,7 @@ router.patch('/:objectId', async function(req, res){
         return;
 	}
 
-	res.status(200).json({success: true, message: "Lista di tag aggiornata"});
+	res.status(201).json({success: true, message: "Lista di tag aggiornata."});
 });
 
 module.exports = router;
