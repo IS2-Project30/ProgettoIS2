@@ -7,11 +7,13 @@ const router = express.Router();
 // Ottieni tutti gli oggetti associati ad una collezione, id_coll passato tramite query
 router.get('/', async function(req, res){
 
+    // Controllo che sia fornito un id_coll
     if(!req.query.id_coll){
         res.status(400).json({success: false, message: "Campo id_coll non fornito."});
         return;
     }
 
+    // Cerco tutti gli oggetti appartenenti alla collezione identificata dal campo id_coll
     try{
         var obj = await Obj.find({id_coll: req.query.id_coll});
     } catch(err){
@@ -19,6 +21,7 @@ router.get('/', async function(req, res){
         return;
     }
 
+    // Sa le ricerca non ha restituito alcun oggetto
     if(!(obj !== undefined && obj.length > 0)){
         res.status(200).json({success: true, message: "Non ci sono oggetti"});
         return;
@@ -86,7 +89,7 @@ router.post('/', async function(req, res){
 // Eliminare un oggetto
 router.delete('/', async function(req, res) {
 
-    // Controllo se è stato inserito l'id del'oggetto
+    // Controllo se è stato inserito l'id dell'oggetto
     if(!req.body.id_obj){
         res.status(400).json({success: false, message: "id_obj mancante."});
         return;
@@ -100,10 +103,85 @@ router.delete('/', async function(req, res) {
         return;
     }
 
+    // Controllo che esista l'oggetto identificato da id_obj
+    try{
+        var oggetto = await Obj.findOne({_id: id_obj});
+    } catch(err){
+        res.status(500).json({success: false, message: "Errore ricerca sul db."});      
+        return;
+    }
+
+    // Se l'oggetto che non esiste
+    if(!oggetto){
+        res.status(404).json({success: false, message: "Non esiste un oggetto con tale id."});
+        return;
+    }
+
     try{
         await Obj.deleteOne({_id: id_obj});
         console.log('Oggetto id: ' + req.body.id_obj + ' eliminato.'); // Stampa di controllo
         res.status(200).json({success: true, message: "Oggetto eliminato."});
+    } catch(err){
+        res.status(500).json({success: false, message: "Errore sul db."});
+    }
+
+});
+
+// Elimina un tag dall'oggetto indicato, richiede id_tag
+router.delete('/:id_obj', async function(req, res){
+
+    // Controllo se è stato inserito l'id del tag
+    if(!req.body.id_tag){
+        res.status(400).json({success: false, message: "id_tag mancante."});
+        return;
+    }
+
+	// Converto la stringa id_tag in oggetto ObjectID
+    try{
+        var id_tag = ObjectID.createFromHexString(req.body.id_tag);
+    } catch(err){
+        res.status(400).json({success: false, message: "id_tag errato."});
+        return;
+    }
+
+	// Converto la stringa id_obj in oggetto ObjectID
+    try{
+        var id_obj = ObjectID.createFromHexString(req.params.id_obj);
+    } catch(err){
+        res.status(400).json({success: false, message: "id_obj errato."});
+        return;
+    }
+
+	// Controolo che l'oggetto indicato esista
+    try{
+        var oggetto = await Obj.findOne({_id: id_obj});
+    } catch(err){
+        res.status(500).json({success: false, message: "Errore ricerca sul db."});
+        return;
+    }
+    // Se l'oggetto che non esiste
+    if(!oggetto){
+        res.status(404).json({success: false, message: "Non esiste un oggetto con tale id."});
+        return;
+    }
+
+    // Controllo che esista il tag nell'oggetto
+	let exist = false;
+	for(i=0; i<oggetto.tag_list.length; ++i){
+		if(oggetto.tag_list[i]._id == req.body.id_tag){
+			exist = true;
+			break;
+		}
+	}
+	if(!exist){
+        res.status(404).json({success: false, message: "Non esiste un tag con tale id."});
+        return;
+	}
+
+    try{
+        var result = await Obj.update({_id: id_obj}, { $pull: {tag_list: {_id: req.body.id_tag}}});
+        console.log("Tag id: " + req.body.id_tag + " eliminato.");
+        res.status(200).json({success: true, message: "Tag eliminato."});
     } catch(err){
         res.status(500).json({success: false, message: "Errore sul db."});
     }

@@ -169,6 +169,16 @@ test('DELETE /api/v1/objects Campo id_obj errato', () => {
         .send({id_obj: '6questo83id131è38errato89'})
         .expect(400, {success: false, message: 'id_obj errato.'});
 });
+
+test("DELETE /api/v1/objects L'id delle oggetto fornito è correto ma non esiste sul db", () => {
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    return request(app)
+        .delete('/api/v1/objects')
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_obj: '1aa1aa1a1a11a11aaa1a1aaa'})
+        .expect(404, {success: false, message: 'Non esiste un oggetto con tale id.'});
+});
 // DA TENERE SOTTO OSSERVAZIONE
 test('GET /api/v1/objects Restituisce tutti gli oggetti appartenenti ad una collezione', () => {
     const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
@@ -187,4 +197,67 @@ test('DELETE /api/v1/objects Oggetto eliminato correttamente', async () => { // 
         .set('content-type', 'application/json')
         .send({id_obj: id._id})
         .expect(200, {success: true, message: 'Oggetto eliminato.'});
+});
+
+test('DELETE/:id_obj Tag eliminato correttamente', async () =>{
+	const id = await Obj.findOne({name: 'ObjectTest1', id_coll: '5fc7ee8a2b95d70adc1a7ffb'});
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	return request(app)
+        .delete('/api/v1/objects/' + id._id)
+		.set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_tag: id.tag_list[0]._id})
+        .expect(200, {success: true, message: "Tag eliminato."});
+});
+
+test('DELETE/:id_obj Campo id_tag non fornito', async () =>{
+	const id = await Obj.findOne({name: 'ObjectTest1', id_coll: '5fc7ee8a2b95d70adc1a7ffb'});
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	return request(app)
+        .delete('/api/v1/objects/' + id._id)
+		.set('token', token)
+        .set('content-type', 'application/json')
+        .expect(400, {success: false, message: "id_tag mancante."});
+});
+
+test('DELETE/:id_obj Campo id_tag non corretto', async () =>{
+	const id = await Obj.findOne({name: 'ObjectTest1', id_coll: '5fc7ee8a2b95d70adc1a7ffb'});
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	return request(app)
+        .delete('/api/v1/objects/' + id._id)
+		.set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_tag: 'palesementeerrato'})
+        .expect(400, {success: false, message: "id_tag errato."});
+});
+
+test('DELETE/:id_obj Campo id_obj non corretto', async () =>{
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	return request(app)
+        .delete('/api/v1/objects/palesementeerrato')
+		.set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_tag: '1aa1a1a1a1111a1aa1a1aa11'})
+        .expect(400, {success: false, message: "id_obj errato."});
+});
+
+test('DELETE/:id_obj Campo id_obj corretto ma non esistente', async () =>{
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	return request(app)
+        .delete('/api/v1/objects/1aa1aaaa1a11a11aaa1a1aaa')
+		.set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_tag: '1aa1a1a1a1111a1aa1a1aa11'})
+        .expect(404, {success: false, message: "Non esiste un oggetto con tale id."});
+});
+
+test("DELETE/:id_obj Campo id_tag corretto ma non presente nell'oggetto", async () =>{
+	const id = await Obj.findOne({name: 'ObjectTest1', id_coll: '5fc7ee8a2b95d70adc1a7ffb'});
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	return request(app)
+        .delete('/api/v1/objects/' + id._id)
+		.set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_tag: '1aa1a1a1a1111a1aa1a1aa11'})
+        .expect(404, {success: false, message: "Non esiste un tag con tale id."});
 });

@@ -81,9 +81,24 @@ router.delete('/', async function(req, res) {
         return;
     }
 
+    // Controllo se la collezione esiste, findOne perché id unico
     try{
-        await Obj.deleteMany({id_coll: req.body.id_coll});
-        await Collection.deleteOne({_id: id_coll});
+        var coll = await Collection.findOne({_id: id_coll});
+    } catch(err){
+        res.status(500).json({success: false, message: "Errore ricerca sul db."});
+        return;
+    }
+
+    // Non è stata trovata alcuna collezione
+    if(!coll){
+        res.status(404).json({success: false, message: "Non esiste una collezione con tale id."});
+        return;
+    }
+
+    // Eliminazione della collezione
+    try{
+        await Obj.deleteMany({id_coll: req.body.id_coll}); // Eliminazione di tutti gli oggetti appartenenti alla collezione
+        await Collection.deleteOne({_id: id_coll}); // Eliminazione della collezione
         console.log('Collezione id: ' + req.body.id_coll + ' eliminata'); // Stampa di controllo
         res.status(200).json({success: true, message: "Collezione eliminata."});
     } catch(err){

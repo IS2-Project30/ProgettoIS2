@@ -97,6 +97,16 @@ test("DELETE /api/v1/collections Campo id_coll errato", () => {
         .send({id_coll: '2questo79id638è51errato03'})
         .expect(400, {success: false, message: 'id_coll errato.'});
 });
+
+test("DELETE /api/v1/collections Non esiste una collezione di id id_coll", () => {
+    const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+    return request(app)
+        .delete('/api/v1/collections')
+        .set('token', token)
+        .set('content-type', 'application/json')
+        .send({id_coll: '1aa1aa1a1a11a11aaa1a1aaa'})
+        .expect(404, {success: false, message: "Non esiste una collezione con tale id."});
+});
 // DA TENERE SOTTO OSSERVAZIONE
 test("DELETE /api/v1/collections Collezione eliminata", async () => {
     const id = await Collection.findOne({name: 'CollezioneTest', email: 'test@test.it'});
