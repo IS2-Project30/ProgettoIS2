@@ -14,18 +14,25 @@ router.get('/', async function(req, res){
 
     try{
         var obj = await Object.find({id_coll: req.query.id_coll});
+        var coll = await Collection.find({_id: req.query.id_coll});
     } catch(err){
         res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
     }
-
+    /*
     if(!(obj !== undefined && obj.length > 0)){
         res.status(200).json({success: true, message: "Non ci sono oggetti"});
         return;
     }
+    */
     console.log("Lista oggetti: " + obj); // Stampa di controllo
 
-    res.status(200).json({success: true, objects: obj});
+    //res.status(200).json({success: true, objects: obj});
+    res.render('pages/objects', {
+        nome_coll: coll[0].name,
+        token: req.query.token,
+        obj: obj
+    })
 });
 
 // Creare un oggetto per una collezione

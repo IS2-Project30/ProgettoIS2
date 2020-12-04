@@ -1,12 +1,14 @@
 const express = require('express');
 const Collection = require('../models/Collection');
+const User = require('../models/User');
 const router = express.Router();
 
 // ottieni tutte le collezioni associate ad un email
 router.get('/', async function(req, res) {
     
     try{
-        var coll = await Collection.find({email: req.loggedUser.email});
+        var coll = await Collection.find({email: req.loggedUser.email}).exec();
+        var user = await User.find({email: req.loggedUser.email}).exec();
     } catch(err){
         res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
@@ -19,12 +21,11 @@ router.get('/', async function(req, res) {
 */
     var collezioni = coll.map((x) => {return {name: x.name, id_coll: x.id}});
 
-    console.log("Collezioni tovate: " + JSON.stringify(collezioni)); // Stampa di prova
-
+    //console.log("Collezioni tovate: " + JSON.stringify(collezioni)); // Stampa di prova
 
     res.render('pages/main', {
-        user: req.query.name,
-        email: req.query.email,
+        name: user[0].name,
+        email: user[0].email,
         token: req.query.token,
         col: collezioni
     })
@@ -65,7 +66,7 @@ router.post('/', async function(req, res) {
 
     try{
         collezione.save();
-        console.log('Collezione salvata'); // Stampa di controllo
+        //console.log('Collezione salvata'); // Stampa di controllo
         res.status(201).json({success: true, message: "Collezione creata."});
     } catch(err){
         console.log('Errore nel salvataggio della collezione');

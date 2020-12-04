@@ -35,7 +35,7 @@ function login(){
 
         if(data.success){ // Se login andato a buon fine, reindirizza
             
-            location.href = "/api/v1/collections?token=" + data.token + "&name=" + data.name + "&email=" + email.value;
+            location.href = "/api/v1/collections?token=" + data.token + "&email=" + email.value;
 
         } else { // Altrimenti stampa errore riscontrato in authentication
             document.getElementById("errore").innerText = data.message;

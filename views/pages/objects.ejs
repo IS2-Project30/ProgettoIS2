@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Pagina collezioni</title>
+    <title>Pagina oggetti</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/stylesheet.css">
@@ -15,8 +15,11 @@
 
     <nav class="navbar navbar-inverse">
       <div class="container">
+        <span class="return">
+            <a href="#">Torna indietro</a>
+          </span>
         <span class="nome">
-          <a href="#">Benvenuto <%= name %></a>
+          <a href="#">Collezione <%= nome_coll %></a>
         </span>
         <span class="logout">
           <a href="#">LogOut</a>
@@ -26,23 +29,20 @@
 
     <div class="container">
 
-        
         <div class="row">
             <div class="column">
-                <a href="/api/v1/collections/crea_collezione?token=<%= token %>&email=<%= email %>">
+                <a href="#">
                     <div class="card">
                         <img class="img_card" src="/img/plus.png" alt="+">
                     </div>
                 </a>
             </div>
-            <% for(var i=0 ; i < col.length ; i++) {%>
-                <a href="/api/v1/objects?id_coll=<%= col[i].id_coll%>&token=<%= token %>">
-                    <div class="column">
-                        <div class="card">
-                            <h3><%= col[i].name %></h3>
-                        </div>
+            <% for(var i=0 ; i < obj.length ; i++) {%>
+                <div class="column">
+                    <div class="card">
+                        <h3><%= obj[i].name %></h3>
                     </div>
-                </a>
+                </div>
             <% } %>
         </div>
 
