@@ -1,5 +1,3 @@
-const { getMaxListeners } = require("../app/app");
-
 function login(){
 
     const email = document.getElementById("loginemail");
@@ -21,23 +19,26 @@ function login(){
 
     //console.log(a.email + " " + a.password);
 
-    fetch('../api/v1/authentication',{
+    fetch('/api/v1/authentication',{
         method:'post',
         headers:{'content-type':'application/json'},
         body:JSON.stringify(a)
     }).then((resp) => resp.json())
     .then(function(data){
-        console.log(data); // Dati di risposta da authentication
-        console.log(data.message);
-        console.log(data.success);
-        console.log(data.token);
+        //console.log(data); // Dati di risposta da authentication
+        //console.log(data.message);
+        //console.log(data.success);
+        //console.log(data.token);
+        //console.log(data.name);
 
         localStorage.token = data.token;
 
         if(data.success){ // Se login andato a buon fine, reindirizza
-             location.href = "./main.html"; // Da modificare, per ora solo per vedere l'effetto
+            
+            location.href = "/api/v1/collections?token=" + data.token + "&name=" + data.name + "&email=" + email.value;
+
         } else { // Altrimenti stampa errore riscontrato in authentication
-             document.getElementById("errore").innerText = data.message;
+            document.getElementById("errore").innerText = data.message;
         }
     });
 }

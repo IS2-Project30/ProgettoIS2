@@ -1,27 +1,39 @@
 const express = require('express');
-const Collection = require('./models/Collection');
+const Collection = require('../models/Collection');
 const router = express.Router();
 
 // ottieni tutte le collezioni associate ad un email
 router.get('/', async function(req, res) {
-
+    
     try{
         var coll = await Collection.find({email: req.loggedUser.email});
     } catch(err){
         res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
     }
-
+/*
     if(!(coll !== undefined && coll.length > 0)){
         res.status(200).json({success: true, message: "Non esistono collezioni."});
         return;
     }
-
+*/
     var collezioni = coll.map((x) => {return {name: x.name, id_coll: x.id}});
 
     console.log("Collezioni tovate: " + JSON.stringify(collezioni)); // Stampa di prova
-    res.status(200).json({success: true, collections: collezioni});
 
+
+    res.render('pages/main', {
+        user: req.query.name,
+        email: req.query.email,
+        token: req.query.token,
+        col: collezioni
+    })
+});
+
+router.get('/crea_collezione', async function(req, res) {
+    res.render('pages/creaCollezione',{
+        email: req.query.email
+    });
 });
 
 //crea collezione associata ad un email

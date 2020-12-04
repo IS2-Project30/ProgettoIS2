@@ -1,0 +1,22 @@
+<%- include ('../layouts/mainHeader.ejs') %>
+
+<div class="row">
+    <div class="column">
+        <a href="/api/v1/collections/crea_collezione?token=<%= token %>&email=<%= email %>">
+            <div class="card">
+                <img class="img_card" src="/img/plus.png" alt="+">
+            </div>
+        </a>
+    </div>
+    <% for(var i=0 ; i < col.length ; i++) {%>
+        <a href="#">
+            <div class="column">
+                <div class="card">
+                    <h3><%= col[i].name %></h3>
+                </div>
+            </div>
+        </a>
+    <% } %>
+</div>
+
+<%- include ('../layouts/footer.ejs') %>

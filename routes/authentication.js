@@ -1,10 +1,15 @@
 const express = require('express');
-const User = require('./models/User');
+const User = require('../models/User');
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-//effettua login con email e password di un utente registrato
+//GET login
+router.get('/', async function(req, res){
+    res.render('pages/login');
+});
+
+//POST effettua login con email e password di un utente registrato
 router.post('/', async function(req, res){
 
     if(!req.body.password || !(req.body.password.length >= 6 && req.body.password.length < 1024)){
@@ -32,7 +37,7 @@ router.post('/', async function(req, res){
         return;
     }
 
-    // console.log(user); // Stampa controllo risposta db
+    //console.log(user); // Stampa controllo risposta db
 
     // Utente non trovato
     if(!user){
@@ -74,6 +79,5 @@ router.post('/', async function(req, res){
         });
     });
 });
-
 
 module.exports = router;

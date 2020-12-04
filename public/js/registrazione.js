@@ -1,5 +1,3 @@
-const { getMaxListeners } = require("../app/app");
-  
 function registrazione(){
 
     const nome = document.getElementById("nome");
@@ -26,7 +24,7 @@ function registrazione(){
 
     //console.log(daRegistrare.name + " " + daRegistrare.email + " " + daRegistrare.password);
 
-    fetch('../api/v1/signup',{
+    fetch('/api/v1/signup',{
         method:'post',
         headers:{'content-type':'application/json'},
         body:JSON.stringify(daRegistrare)
@@ -35,13 +33,11 @@ function registrazione(){
         console.log(data); // Dati di risposta da authentication
         console.log(data.message);
         console.log(data.error);
-/*
-        if(data.success){ // Se login andato a buon fine, reindirizza
-            location.href = "./main.html"; // Da modificare, per ora solo per vedere l'effetto
-        } else { // Altrimenti stampa errore riscontrato in authentication
-             document.getElementById("errore").innerText = data.error;
-        }
-*/
-    });
 
+        if(data.success){ // Se login andato a buon fine, reindirizza
+            location.href = "/api/v1/authentication";
+        } else { // Altrimenti stampa errore riscontrato in authentication
+            document.getElementById("errore").innerText = data.error;
+        }
+    });
 }

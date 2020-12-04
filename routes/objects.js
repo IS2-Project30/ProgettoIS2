@@ -1,7 +1,7 @@
 const express = require('express');
 const ObjectID = require ('mongodb').ObjectID
-const Collection = require('./models/Collection');
-const Object = require('./models/Object');
+const Collection = require('../models/Collection');
+const Object = require('../models/Object');
 const router = express.Router();
 
 // Ottieni tutti gli oggetti associati ad una collezione, id_coll passato tramite query

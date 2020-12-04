@@ -4,7 +4,7 @@ const tokenChecker = function(req, res, next) {
 	
 	// Controllo se esiste un token
 	var token = req.body.token || req.query.token || req.headers['token'];
-
+	
 	// Se non trovo alcun token
 	if (!token) {
 		return res.status(401).send({ 
@@ -23,11 +23,10 @@ const tokenChecker = function(req, res, next) {
 		} else {
 			// if everything is good, save to request for use in other routes
 			req.loggedUser = decoded;
-                        console.log("Decodifica token: " + JSON.stringify(decoded)); // Stampa di controllo
+            //console.log("Decodifica token: " + JSON.stringify(decoded)); // Stampa di controllo
 			next();
 		}
 	});
-	
 };
 
 module.exports = tokenChecker
