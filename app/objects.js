@@ -16,19 +16,24 @@ router.get('/', async function(req, res){
     // Cerco tutti gli oggetti appartenenti alla collezione identificata dal campo id_coll
     try{
         var obj = await Obj.find({id_coll: req.query.id_coll});
+        var coll = await Collection.findOne({_id: req.query.id_coll});
     } catch(err){
         res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
     }
-
+/*
     // Sa le ricerca non ha restituito alcun oggetto
     if(!(obj !== undefined && obj.length > 0)){
         res.status(200).json({success: true, message: "Non ci sono oggetti"});
         return;
     }
+*/
+
     console.log("Lista oggetti: " + obj); // Stampa di controllo
 
-    res.status(200).json({success: true, objects: obj});
+    console.log("Coll : " + coll)
+
+    res.status(200).json({success: true, objects: obj, coll_name: coll.name});
 });
 
 // Creare un oggetto per una collezione

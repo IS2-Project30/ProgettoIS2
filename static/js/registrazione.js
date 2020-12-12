@@ -1,4 +1,4 @@
-const { getMaxListeners } = require("../app/app");
+//const { getMaxListeners } = require("../../app/app");
   
 function registrazione(){
 

@@ -2,28 +2,41 @@
 
 <html>
 <head>
-    <title>Test crea collezioni</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea collezioni</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/stylesheet.css">
+    <script type="text/javascript" src="./js/crea.js"></script>
 </head>
 <body>
-    <h1>Form per testare creazione collezione</h1>
-    <form>
-        <table>
-            <tr>
-                <td>Nome collezione: </td>
-                <td><input type="text" name="name" id="name" required></td>
-            </tr>
-            <tr>
-                <td>Email: </td>
-                <td><input type="email", name="email", id="email" required></td>
-            </tr>
-        </table>
-        <button type="button" onclick="crea()">Crea</button>
-    </form>
-    <p id="errore"></p>
 
-    <script src="crea.js"></script>
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <span class="rendo">
+                <a href="./main.html">
+                    <div> Torna indietro</div>
+                </a>
+            </span>
+            <span class="logout">
+                <a href="#">LogOut</a>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Crea Collezione</h1>
+        <form name="creaCollezione" id="formCrea">  
+            <div class="form-group">
+                <label>Nome: </label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Nome" required>
+            </div>
+            <button type="button" class="btn btn-default" onclick="crea()">Crea nuova collezione</button>
+        </form>
+        <p id="errore"></p>
+    </div>
+
 </body>
 </html>

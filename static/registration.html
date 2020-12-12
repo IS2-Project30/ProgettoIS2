@@ -1,37 +1,57 @@
 <!DOCTYPE html>
-
 <html>
     <head>
-        <title></title>
+        <title>Registrazione</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="shortcut icon" href="">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./css/stylesheet.css">
+        <script type="text/javascript" src="./js/registrazione.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <h1>Registrazione</h1>
-        <form name="registrationform" id="registrationform">  
-            <table>
-                <tr>
-                    <td>Nome: </td>
-                    <td><input type="text" name="nome" id="nome" required></td>
-                </tr>
-                <tr>
-                    <td>Email: </td>
-                    <td><input type="email" name="email" id="email" required></td>
-                </tr>
-                <tr>
-                    <td>Password: </td>
-                    <td><input type="password" name="password" id="password" required/></td>
-                </tr>
-            </table>
-            <button type="button" onclick="registrazione()">Registrati</button>
-        </form>
-        <p id="errore"></p>
 
-        <p>
-            <a href="./login.html">Hai già un account?</a>
-        </p>
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Progetto Ingegneria del Software 2</a>
+              </div>
+              <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                  <li class=""><a href="./login.html">LogIn</a></li>
+                  <li><a href="./registration.html">Registrati</a></li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+        </nav>
 
-        <script src="registrazione.js"></script> 
+        <div class="container">
+          <h1>Registrazione</h1>
+          <form name="registrationform" id="registrationform">  
+              <div class="form-group">
+                  <label>Nome: </label>
+                  <input type="text" name="nome" class="form-control" id="nome" placeholder="Nome" required>
+              </div>
+              <div class="form-group">
+                  <label>Email: </label>
+                  <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="form-group">
+                  <label>Password: </label>
+                  <input type="password" name="password" class="form-control" id="password" placeholder="Password" required/>
+              </div>
+              <button type="button" class="btn btn-default" onclick="registrazione()">Registrati</button>
+          </form>
+          <p id="errore"></p>
+        </div>
     </body>
 </html>
