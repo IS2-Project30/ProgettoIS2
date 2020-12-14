@@ -32,7 +32,7 @@ test('GET /api/v1/collections Token non più valido, errore intercettato da toke
         .set('token', token)
         .expect(403, {success: false, message: 'Fallimento autenticazione token.'});
 });
-
+/*
 test("GET /api/v1/collections Nessuna collezione associata all'utente identificato tramite email", () => {
     const token = jwt.sign({email: 'no_coll@gmail.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
@@ -40,7 +40,7 @@ test("GET /api/v1/collections Nessuna collezione associata all'utente identifica
         .set('token', token)
         .expect(200, {success: true, message: "Non esistono collezioni."});
 });
-
+*/
 test("GET /api/v1/collections Ottiene array contenente i nomi delle collezioni appartenenti all'utente identificato tramite email", () => {
     const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
@@ -55,7 +55,7 @@ test("POST /api/v1/collections Nome per la collezione non valido", () => {
         .post('/api/v1/collections')
         .set('token', token)
         .set('content-type', 'application/json')
-        .send({name: ''})
+        .send({coll: {name: ''}})
         .expect(400, {success: false, message: "Nome non valido."});
 });
 
@@ -65,7 +65,7 @@ test("POST /api/v1/collections Crea una collezione con nome indicato", () => {
         .post('/api/v1/collections')
         .set('token', token)
         .set('content-type', 'application/json')
-        .send({name: 'CollezioneTest'})
+        .send({coll: {name: 'CollezioneTest'}})
         .expect(201);
 });
 
@@ -75,7 +75,7 @@ test("POST /api/v1/collections Una collezione col nome indicato esiste già", ()
         .post('/api/v1/collections')
         .set('token', token)
         .set('content-type', 'application/json')
-        .send({name: 'CollezioneTest1'})
+        .send({coll: {name: 'CollezioneTest1'}})
         .expect(409, {success: false, message: "Una collezione con questo nome esiste già."});
 });
 

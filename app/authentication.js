@@ -46,7 +46,7 @@ router.post('/', async function(req, res){
     }
 
     var options = {
-        expiresIn: 86400 // Scade dopo 24 ore
+        expiresIn: parseInt(process.env.TIME_TO_LIVE)
     }
 
     bcrypt.compare( req.body.password, user.password, (err, result) => {
