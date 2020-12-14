@@ -13,7 +13,11 @@ var objectSchema = new mongoose.Schema({
     },
     tag_list: {
         type: [ {tag: String, value: String} ]
-    }
+    },
+	objectImage: {
+		type: String,
+		required: false
+	}
 });
 
 module.exports = mongoose.model('Object', objectSchema);

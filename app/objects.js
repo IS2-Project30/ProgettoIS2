@@ -3,6 +3,41 @@ const ObjectID = require ('mongodb').ObjectID;
 const Collection = require('./models/Collection');
 const Obj = require('./models/Object');
 const router = express.Router();
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+	//property destination, dove i file verrano salvati
+	destination: function(req, file, callback){
+		callback(null, "./uploads");
+	},
+	//property filename, come i file verranno rinominati
+	filename: function(req, file, callback){
+		callback(null, new Date().toISOString() + file.originalname);
+	}
+});
+
+const fileFilter = (req, file, callback) => {
+	if( file.mimetype === "image/jpeg" ||
+		file.mimetype === "image/png" ||
+		file.mimetype === "image/gif"){
+		//accept a file, lo salva
+		callback(null, true);
+	}else{
+		//reject a file, lo ignora
+		callback( {
+			success: false,
+			message: "Errore formato immagine non supportato."},false
+		);
+	}
+};
+
+const upload = multer( {
+	storage: storage,
+	limits: {
+		fileSize: 1024 * 1024
+	},
+	fileFilter: fileFilter
+});
 
 // Ottieni tutti gli oggetti associati ad una collezione, id_coll passato tramite query
 router.get('/', async function(req, res){
@@ -113,7 +148,7 @@ router.delete('/', async function(req, res) {
     try{
         var oggetto = await Obj.findOne({_id: id_obj});
     } catch(err){
-        res.status(500).json({success: false, message: "Errore ricerca sul db."});      
+        res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
     }
 
@@ -194,7 +229,7 @@ router.delete('/:id_obj', async function(req, res){
 
 });
 
-/*	Formato msg http per patch object
+/*	Formato tag_list in msg http per patch object
 	{
 		tag_list: [
 			{"tag": "nometag", "value": "valoretag"},
@@ -204,11 +239,23 @@ router.delete('/:id_obj', async function(req, res){
 		"token": "valore token"
 	}
 */
-//modifica di un Oggetto, aggiunta delle tags
-router.patch('/:objectId', async function(req, res){
-	const req_tag_list = req.body.tag_list;
+//modifica di un Oggetto, aggiunta delle tags e/o immagine
+router.patch('/:objectId', upload.single("objectImage"), async function(req, res){
+	var req_tag_list = req.body.tag_list;
 	var objectId;
 	var oggetto;
+	var image = "";
+	var nuoviTags = [];
+
+	//se la lista viene passata come stringa la converto in oggetto
+	if( typeof(req_tag_list) == "string"){
+		try{
+			req_tag_list = JSON.parse(req_tag_list);
+		}catch(err){
+			res.status(400).json({success: false, message: "Non esiste tag_list o vi son errori di sintassi."});
+	        return;
+		}
+	}
 
 	//tag_list non valida
 	if( !req_tag_list){
@@ -239,7 +286,6 @@ router.patch('/:objectId', async function(req, res){
 	}
 
 	//creazione lista di oggetti conformi al modello e controllo tag
-	var nuoviTags = [];
 	for( i=0; i<req_tag_list.length; i++){
 
 		//se è presente il campo "tag"
@@ -267,17 +313,35 @@ router.patch('/:objectId', async function(req, res){
 	}
 
 	// applicazione modifiche
-	try{
-		await Obj.findOneAndUpdate( JSON.stringify(objectId), {
-			$push: {tag_list: nuoviTags} }, {
-			new: true
-		});
-	}catch(err){
-		res.status(500).json({success: false, message: "Errore update sul db."});
-        return;
+	//se è presente un file
+	if( req.file){
+		image = req.file.path;
+
+		//applicazione modifiche con immagine
+		try{
+			await Obj.findOneAndUpdate( JSON.stringify(objectId), {
+				$push: {tag_list: nuoviTags}, objectImage: image }, {
+				new: true
+			});
+		}catch(err){
+			res.status(500).json({success: false, message: "Errore update sul db."});
+	        return;
+		}
+
+	}else{
+		//applicazione modifiche senza immagine
+		try{
+			await Obj.findOneAndUpdate( JSON.stringify(objectId), {
+				$push: {tag_list: nuoviTags} }, {
+				new: true
+			});
+		}catch(err){
+			res.status(500).json({success: false, message: "Errore update sul db."});
+	        return;
+		}
 	}
 
-	res.status(201).json({success: true, message: "Lista di tag aggiornata."});
+	res.status(201).json({success: true, message: "Oggetto aggiornato con successo."});
 });
 
 module.exports = router;

@@ -151,6 +151,20 @@ test('PATCH /api/v1/objects/:objectId tag presente ma vuoto', async () => {
         .expect(400, {success: false, message: "I campi tag non possono essere vuoti."});
 });
 
+/* incompleto
+test('PATCH /api/v1/objects/:objectId immagine e tag inseriti', async() => {
+	const id = await Obj.findOne({name: 'ObjectTest1', id_coll: '5fc7ee8a2b95d70adc1a7ffb'});
+	const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
+	const lista = "[{\"tag\": \"test tag\", \"valore\": \"test valore\"}]";
+
+	return request(app)
+        .patch('/api/v1/objects/' + id._id)
+		.set('token', token)
+        .set('content-type', 'application/json')
+		.send({tag_list: lista, objectImage: binImage})
+	    .expect(201, {success: true, message: "Oggetto aggiornato con successo."});
+});
+*/
 test('DELETE /api/v1/objects Campo id_obj non fornito', () => {
     const token = jwt.sign({email: 'test@test.it'}, process.env.SUPER_SECRET, { expiresIn: 10 });
     return request(app)
