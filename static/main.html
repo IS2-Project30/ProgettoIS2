@@ -29,7 +29,7 @@
 
       <div id="griglia" class="row">
         <div class="column">
-          <a class="btn-proj" id="crea_col">
+          <a class="a-proj" id="crea_col">
             <div class="card">
                 <img class="img_card" src="./img/plus.png" alt="+">
             </div>
@@ -37,8 +37,27 @@
         </div>
         <!-- Qui verrranno aggiunte dinamicamente le altre collezioni-->
       </div>
-
     </div>
 
+    <!-- Modal modifica collezione -->
+    <div class="modal-container modal-modifica">
+      <div class="modal1">
+        <label for="name">Nuovo nome: </label>
+        <p id="errore-modal"></p>
+        <input type="text" name="name" id="nuovo-nome">
+        <button onclick="modificaCollezione()">Cambia nome</button>
+        <span class="modal-m-close">X</span>
+      </div>
+    </div>
+
+    <!-- Modal cancella collezione-->
+    <div class="modal-container modal-cancella">
+      <div class="modal1">
+        <button onclick="eliminaCollezioen()">Elimina collezione</button>
+        <span class="modal-c-close">X</span>
+      </div>
+    </div>
+
+    <input type="hidden" id="id-coll-modal">
 </body>
 </html>

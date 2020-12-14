@@ -39,6 +39,7 @@ h3{
 
 /* Float four columns side by side */
 .column {
+    position: relative;
     float: left;
     margin: 10px;
     width: 30%;
@@ -69,9 +70,11 @@ h3{
 
 /* Style the counter cards */
 .card {
+    position: relative;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 10px;
     text-align: center;
+    align-items: center;
     background-color: #f1f1f1;
     min-height: 150px;
     min-width: 200px;
@@ -80,13 +83,70 @@ h3{
 .img_card{
     width: 75%;
     height: 75%;
-    object-fit: contain;
 }
 
-.btn-proj{
+.a-proj{
     padding: 0;
     border: 0;
 }
-.btn-proj :hover{
-    background-color: #bfbfbf;
+.a-proj :hover{
+    background-color: #e9e9e9;
+}
+.btn-proj {
+    position: absolute;
+    top: 5px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    z-index: 2;
+}
+.btn-proj.cancel {
+    left: 5px;
+    background-image: url("../img/cancel.png");
+    background-color: #f1f1f1;
+    background-size: 30px 30px;
+}
+.btn-proj.change {
+    right: 5px;
+    background-image: url("../img/change.png");
+    background-color: #f1f1f1;
+    background-size: 30px 30px;
+}
+
+.modal-container{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+}
+.modal-attiva{
+    visibility: visible;
+    opacity: 1;
+}
+.modal1{
+    position: relative;
+    background-color: white;
+    padding: 15px;
+    width: 35%;
+    height: 30%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+.modal-m-close, .modal-c-close{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: bold; 
+    cursor: pointer;   
 }
