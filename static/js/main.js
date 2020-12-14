@@ -75,7 +75,7 @@ function modificaCollezione(){
     //Implementare metodi
 }
 
-function eliminaCollezioen(){
+function eliminaCollezione(){
     var id_coll = document.getElementById("id-coll-modal");
 
     console.log('Elimina collezione: ' + id_coll.value);

@@ -27,8 +27,6 @@ function crea(){
         console.log(data.message);
         console.log(data.success);
 
-        location.href = "./main.html"
+        location.href = "./main.html";
     });
-
-
 }

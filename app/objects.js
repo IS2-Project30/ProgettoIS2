@@ -40,20 +40,20 @@ router.get('/', async function(req, res){
 router.post('/', async function(req, res){
 
     // Controllo se è stato inserito un nome valido per la collezione
-    if(!req.body.name || !(req.body.name.length >= 2 && req.body.name.length < 255)){
+    if(!req.body.obj.name || !(req.body.obj.name.length >= 2 && req.body.obj.name.length < 255)){
         res.status(400).json({success: false, message: "Nome non valido."});
         return;
     }
 
     // Controllo se è stato inserito l'id della collezione a cui aggiungere l'oggetto
-    if(!req.body.id_coll){
+    if(!req.body.obj.id_coll){
         res.status(400).json({success: false, message: "id_coll mancante."});
         return;
     }
 
     // Converto la stringa id_coll in oggetto ObjectID
     try{
-        var id_coll = ObjectID.createFromHexString(req.body.id_coll);
+        var id_coll = ObjectID.createFromHexString(req.body.obj.id_coll);
     } catch(err){
         res.status(400).json({success: false, message: "id_coll errato."});
         return;
@@ -75,8 +75,9 @@ router.post('/', async function(req, res){
 
     // Creo l'oggetto da salvare, AGGINGERE tag_list
     const obj = new Obj({
-        name: req.body.name,
-        id_coll: req.body.id_coll
+        name: req.body.obj.name,
+        id_coll: req.body.obj.id_coll,
+        tag_list:[]
     });
 
     // Salvo l'oggetto sul db
