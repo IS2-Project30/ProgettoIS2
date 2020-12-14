@@ -4,6 +4,7 @@ const Collection = require('./models/Collection');
 const Obj = require('./models/Object');
 const router = express.Router();
 const multer = require("multer");
+const fs = require('fs');
 
 const storage = multer.diskStorage({
 	//property destination, dove i file verrano salvati
@@ -158,13 +159,40 @@ router.delete('/', async function(req, res) {
         return;
     }
 
-    try{
-        await Obj.deleteOne({_id: id_obj});
-        console.log('Oggetto id: ' + req.body.id_obj + ' eliminato.'); // Stampa di controllo
-        res.status(200).json({success: true, message: "Oggetto eliminato."});
-    } catch(err){
-        res.status(500).json({success: false, message: "Errore sul db."});
-    }
+	//se vi è un immagine associata all'oggetto
+	if( typeof(oggetto.objectImage) != "undefined"){
+
+		//cancellazione immagine dal server
+		fs.unlink(oggetto.objectImage, function(err){
+			if( err){
+				res.status(500).json({success: false, message: "Errore cancellazione immagine."});
+				return;
+			}
+		});
+
+		//cancellazione oggetto
+		try{
+	        await Obj.deleteOne({_id: id_obj});
+	        console.log('Oggetto id: ' + req.body.id_obj + ' eliminato.'); // Stampa di controllo
+	        res.status(200).json({success: true, message: "Oggetto eliminato."});
+			return;
+		} catch(err){
+	        res.status(500).json({success: false, message: "Errore sul db."});
+			return;
+		}
+
+	}else{	//se non vi è un immagine cancello solo l'oggetto
+
+		try{
+	        await Obj.deleteOne({_id: id_obj});
+	        console.log('Oggetto id: ' + req.body.id_obj + ' eliminato.'); // Stampa di controllo
+	        res.status(200).json({success: true, message: "Oggetto eliminato."});
+			return;
+		} catch(err){
+	        res.status(500).json({success: false, message: "Errore sul db."});
+			return;
+		}
+	}
 
 });
 
@@ -319,7 +347,7 @@ router.patch('/:objectId', upload.single("objectImage"), async function(req, res
 
 		//applicazione modifiche con immagine
 		try{
-			await Obj.findOneAndUpdate( JSON.stringify(objectId), {
+			await Obj.findOneAndUpdate( {_id: objectId}, {
 				$push: {tag_list: nuoviTags}, objectImage: image }, {
 				new: true
 			});
@@ -331,7 +359,7 @@ router.patch('/:objectId', upload.single("objectImage"), async function(req, res
 	}else{
 		//applicazione modifiche senza immagine
 		try{
-			await Obj.findOneAndUpdate( JSON.stringify(objectId), {
+			await Obj.findOneAndUpdate( {_id: objectId}, {
 				$push: {tag_list: nuoviTags} }, {
 				new: true
 			});
