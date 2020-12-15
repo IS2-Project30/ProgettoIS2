@@ -41,7 +41,29 @@ fetch('../api/v1/objects?id_coll='+id_coll, {
         btn2.setAttribute("id", data.objects[i]._id);
         var txt = document.createElement("h3");
         txt.innerHTML = data.objects[i].name;
+        var div = document.createElement("div");
+        div.className = "scroll";
 
+        for(var j = 0;j<data.objects[i].tag_list.length;j++){
+            var div1 = document.createElement("div");
+            div1.className = "tag";
+            var txt1 = document.createElement("label");
+            txt1.innerHTML = 'Nome';
+            var input1 = document.createElement("input");
+            input1.setAttribute("placeholder", data.objects[i].tag_list[j].tag);
+            var txt2 = document.createElement("label");
+            txt2.innerHTML = 'Valore';
+            var input2 = document.createElement("input");
+            input2.setAttribute("placeholder", data.objects[i].tag_list[j].value);
+        
+            div1.appendChild(txt1);
+            div1.appendChild(input1);
+            div1.appendChild(txt2);;
+            div1.appendChild(input2);
+
+            div.appendChild(div1);
+        }
+        
         //Modal
         btn1.addEventListener('click',function(){
             modalCancella.classList.add('modal-attiva');
@@ -53,26 +75,14 @@ fetch('../api/v1/objects?id_coll='+id_coll, {
         });
 
         col.appendChild(btn1);
-        col.appendChild(btn2);
+        col.appendChild(btn2);       
         card.appendChild(txt);;
         col.appendChild(card);
+        col.appendChild(div);
 
-        document.getElementById("griglia").appendChild(col);
+        document.querySelector(".row").appendChild(col);
     }
 });
-
-function modificaOggetto(){
-    var nuovoNome = document.getElementById("nuovo-nome");
-    var id_obj = document.getElementById("id-obj-modal");
-    
-    if(!nuovoNome.value){
-        document.getElementById("errore-modal").innerHTML = 'Inserire un nuovo nome';
-        return;
-    }
-
-    console.log('Modifica nome: ' + id_obj.value + ' ' + nuovoNome.value);
-    //Implementare metodi
-}
 
 function eliminaOggetto(){
     var id_obj = document.getElementById("id-obj-modal");
@@ -92,3 +102,37 @@ function eliminaOggetto(){
         location.href = "./object.html?id=" + id_coll;
     });
 }
+
+function modificaOggetto(){
+    var nuovoNome = document.getElementById("nuovo-nome");
+    var id_obj = document.getElementById("id-obj-modal");
+    
+    if(!nuovoNome.value){
+        nuovoNome.value = obj.name;
+    }
+
+    for(var i=0; i < obj.tag_list.length; i++){
+
+        var div1 = document.createElement("div");
+
+        var txt1 = document.createElement("label");
+        txt1.innerHTML = 'Nome';
+        var input1 = document.createElement("input");
+        input1.setAttribute("placeholder", obj.tag_list[i].tag);
+        var txt2 = document.createElement("label");
+        txt2.innerHTML = 'Valore';
+        var input2 = document.createElement("input");
+        input2.setAttribute("placeholder", obj.tag_list[i].value);
+
+        div1.appendChild(txt1);
+        div1.appendChild(input1);
+        div1.appendChild(txt2);;
+        div1.appendChild(input2);
+
+        document.getElementById("modal-tag").appendChild(div1);
+    }
+
+    console.log('Modifica nome: ' + id_obj.value + ' ' + nuovoNome.value);
+    //Implementare metodi
+}
+
