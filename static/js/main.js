@@ -40,6 +40,7 @@ fetch('../api/v1/collections', {
         btn2.className = "btn-proj change";
         btn2.setAttribute("id", data.collections[i].id_coll);
         var txt = document.createElement("h3");
+        txt.className = "nome-collezione";
         txt.innerHTML = data.collections[i].name;
 
         //Modal

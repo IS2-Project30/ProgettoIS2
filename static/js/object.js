@@ -40,6 +40,7 @@ fetch('../api/v1/objects?id_coll='+id_coll, {
         btn2.className = "btn-proj change";
         btn2.setAttribute("id", data.objects[i]._id);
         var txt = document.createElement("h3");
+        txt.className = "nome-oggetto";
         txt.innerHTML = data.objects[i].name;
         var div = document.createElement("div");
         div.className = "scroll";
@@ -47,19 +48,23 @@ fetch('../api/v1/objects?id_coll='+id_coll, {
         for(var j = 0;j<data.objects[i].tag_list.length;j++){
             var div1 = document.createElement("div");
             div1.className = "tag";
-            var txt1 = document.createElement("label");
-            txt1.innerHTML = 'Nome';
-            var input1 = document.createElement("input");
-            input1.setAttribute("placeholder", data.objects[i].tag_list[j].tag);
-            var txt2 = document.createElement("label");
-            txt2.innerHTML = 'Valore';
-            var input2 = document.createElement("input");
-            input2.setAttribute("placeholder", data.objects[i].tag_list[j].value);
+            var txt1 = document.createElement("b");
+            txt1.innerHTML = 'Nome: ';
+            var nome = document.createElement("label");
+            nome.innerHTML = data.objects[i].tag_list[j].tag;
+            nome.setAttribute('style', 'font-size : 18px; font-family: verdana;');
+            var br = document.createElement("br");
+            var txt2 = document.createElement("b");
+            txt2.innerHTML = 'Valore: ';
+            var valore = document.createElement("label");
+            valore.innerHTML = data.objects[i].tag_list[j].value;
+            valore.setAttribute('style', 'font-size : 18px; font-family: verdana;');
         
             div1.appendChild(txt1);
-            div1.appendChild(input1);
+            div1.appendChild(nome);
+            div1.appendChild(br);
             div1.appendChild(txt2);;
-            div1.appendChild(input2);
+            div1.appendChild(valore);
 
             div.appendChild(div1);
         }
