@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-//effettua login con email e password di un utente registrato
+// Effettua login con email e password di un utente registrato
 router.post('/', async function(req, res){
 
     if(!req.body.password || !(req.body.password.length >= 6 && req.body.password.length < 1024)){

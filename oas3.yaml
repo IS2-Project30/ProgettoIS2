@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: '1.0'
+  version: "1.0"
   title: "Project_30"
   description: Queste sono le API utilizzate nella nostra applicazione che consente ad ogni utente di creare delle collezioni di oggetti personalizzate.
   license:
@@ -25,19 +25,19 @@ paths:
               properties:
                 email:
                   type: string
-                  description: 'Username dell utente'
+                  description: "Email dell'utente"
                 password:
                   type: string
-                  description: 'Password dell utente'
+                  description: "Password dell'utente"
       responses:
-        '201':
-          description: 'Utente autenticato. Link alla home della pagina'
-        '500':
-          description: 'Errore nel server'
-        '400':
-          description: 'Errore input'
-        '401':
-          description: 'Autenticazione fallita'
+        "200":
+          description: "Autenticazione riuscita."
+        "400":
+          description: "Errore input."
+        "401":
+          description: "Autenticazione fallita."
+        "500":
+          description: "Errore nel server."
 
   /signup:
     post:
@@ -56,43 +56,48 @@ paths:
               properties:
                 username:
                   type: string
-                  description: 'Username dell utente'
+                  description: "Username dell utente"
                 email:
                   type: string
-                  description: 'Email dell utente'
+                  description: "Email dell utente"
                 password:
                   type: string
-                  description: 'Password dell utente'
+                  description: "Password dell utente"
       responses:
-        '201':
-          description: 'Utente registrato con successo'
-        '500':
-          description: 'Errore registrazione'
-        '400':
-          description: 'Errore input'
-        '409':
-          description: 'Email già registrata'
-        
+        "200":
+          description: "Utente registrato con successo."
+        "400":
+          description: "Errore input."
+        "409":
+          description: "Email già registrata."
+        "500":
+          description: "Errore registrazione."
+
   /collections:
     get:
       description: >-
         Ritorna i nomi e gli id di tutte le collezioni appartenenti ad un utente.
       summary: Ritorna tutte le collezioni ed il loro id
+      parameters:
+        - in: header
+          name: token
+          required: true
+          description: Token dell'utente
       responses:
-        '200':
-          description: 'Lista nomi ed id delle collezioni'
-        '200':
-          description: 'Non esistono collezioni associate allo utente'
-        '401':
-          description: 'Nessun token fornito.'
-        '403':
-          description: 'Fallimento autenticazione token.'
-        '500':
-          description: 'Errore sul db'
+        "200":
+          description: "Lista nomi ed id delle collezioni."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "500":
+          description: "Errore sul db."
   
     post:
       description: >-
-        Creazione di una nuova collezione. Necessità del nome che l'utente desidera assegnare alla collezione.
+        Creazione di una nuova collezione. Necessità del nome che l'utente desidera assegnare alla collezione e la sua email.
       summary: Creazione collezione
       requestBody:
         content:
@@ -100,24 +105,37 @@ paths:
             schema:
               type: object
               required:
-                - name
+                - coll
+                - token
               properties:
-                name:
+                coll:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: "Nome della nuova collezione"
+                    email:
+                      type: string
+                      description: "Email dell'utente'"
+                  description: "Coniene nome della collezione e email dell'utente"
+                token:
                   type: string
-                  description: 'Nome da assegnare alla collezione'
+                  description: "Token associato all'utente"
       responses:
-        '201':
-          description: 'Collezione creata'
-        '500':
-          description: 'Errore creazione collezione'
-        '400':
-          description: 'Campo name mancante nella request'
-        '409':
-          description: 'Collezione con nome indicato già registrata'
-        '401':
-          description: 'Nessun token fornito.'
-        '403':
-          description: 'Fallimento autenticazione token.'
+        "201":
+          description: "Collezione creata."
+        "400":
+          description: "Campo name mancante nella request."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "409":
+          description: "Collezione con nome indicato già registrata."
+        "500":
+          description: "Errore creazione collezione."
 
     delete:
       description: >-
@@ -130,47 +148,110 @@ paths:
               type: object
               required:
                 - id_coll
+                - token
               properties:
                 id_coll:
                   type: string
-                  description: 'Id della collezione da eliminare'
+                  description: "Id della collezione da eliminare"
+                token:
+                  type: string
+                  description: "Token associato all'utente"
       responses:
-        '200':
-          description: 'Collezione elimitata.'
-        '400':
-          description: 'id_coll mancante.'
-        '400':
-          description: 'id_coll errato.'
-        '500':
-          description: 'Errore sul db.'
+        "200":
+          description: "Collezione elimitata."
+        "400":
+          description: "id_coll mancante."
+        "400":
+          description: "id_coll errato."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "404":
+          description: "Non esiste una collezione con tale id."
+        "500":
+          description: "Errore sul db."
+        "500":
+          description: "Errore cancellazione immagine."
 
+  /collections/{collId}:
+    patch:
+      description: >-
+        Modifica il nome di una collezione. Necessità dell'id della collezione
+      summary: Modifica nome collezione
+      parameters:
+        - in: path
+          name: collId
+          required: true
+          description: Id della collezione
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nuovoNome
+                - token
+              properties:
+                nuovoNome:
+                  type: string
+                  description: "Nuovo nome da dare alla collezione"
+                token:
+                  type: string
+                  description: "Token associato all'utente"
+      responses:
+        "201":
+          description: "Collezione aggiornata con successo."
+        "400":
+          description: "Non esiste un nuovo nome."
+        "400":
+          description: "collId errato."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "404":
+          description: "Non esiste una collezione con tale id."
+        "500":
+          description: "Errore sul db."
 
   /objects:
     get:
       description: >-
-        Ottenere gli oggetti appartenenti ad una collezione. Necessita di ID collezione.
+        Ottenere gli oggetti appartenenti ad una collezione. Necessita dell'id della collezione.
       summary: Ottenimento oggetti di una collezione
       parameters:
         - in: query
           name: id_coll
           required: true
+          description: "Id della collezione"
+        - in: header
+          name: token
+          required: true
+          description: "Token associato all'utente"
       responses:
-        '200':
-          description: 'Ritorna la lista degli oggetti appartenenti alla collezine'
-        '200':
-          description: 'Oggetti non trovati'
-        '400':
-          description: 'Campo id_coll non fornito.'
-        '401':
-          description: 'Nessun token fornito.'
-        '403':
-          description: 'Fallimento autenticazione token.'
-        '500':
-          description: 'Errore generico'
+        "200":
+          description: "Ritorna la lista degli oggetti appartenenti alla collezine."
+        "400":
+          description: "Campo id_coll non fornito."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "404":
+          description: "Campo id_coll non valido."
+        "500":
+          description: "Errore sul db."
 
     post:
       description: >-
-        Creazione di un nuovo oggetto. Necessità ID della collezione e nome dell'oggetto.
+        Creazione di un nuovo oggetto. Necessità id della collezione e nome dell'oggetto.
       summary: Creazione oggetto
       requestBody:
         content:
@@ -178,24 +259,41 @@ paths:
             schema:
               type: object
               required:
-                - id_coll
-                - name
+                - obj
+                - token
               properties:
-                id_coll:
+                obj:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: "Nome del nuovo oggetto"
+                    id_coll:
+                      type: string
+                      description: "Id della collezione"
+                  description: "Contiene nome oggetto e id collezione"
+                token:
                   type: string
-                  description: 'ID della collezione'
-                name:
-                  type: string
-                  description: "Nome da assegnare all'oggetto"
+                  description: "Token associato all'utente"
       responses:
-        '201':
-          description: 'Oggetto creato'
-        '500':
-          description: 'Errore generico'
-        '400':
-          description: 'Nome scorretto'
-        '404':
-          description: 'Non esiste una collezione con tale id'
+        "201":
+          description: "Oggetto creato."
+        "400":
+          description: "Nome non valido."
+        "400":
+          description: "id_coll mancante."
+        "400":
+          description: "id_coll errato."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "404":
+          description: "Non esiste una collezione con tale id"
+        "500":
+          description: "Errore sul db."
 
     delete:
       description: >-
@@ -208,19 +306,146 @@ paths:
               type: object
               required:
                 - id_obj
+                - token
               properties:
                 id_obj:
                   type: string
                   description: "Id dell'oggetto da eliminare"
+                token:
+                  type: string
+                  description: "Token associato all'utente"
+      responses:
+        "200":
+          description: "Oggetto elimitato."
+        "400":
+          description: "id_obj mancante."
+        "400":
+          description: "id_obj errato."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "404":
+          description: "Non esiste un oggetto con tale id."
+        "500":
+          description: "Errore sul db."
+        "500":
+          description: "Errore cancellazione immagine."
+
+  /objects/{id_obj}:
+    delete:
+      description: >-
+        Elimina un tag da un oggetto. Necessità dell'id dell'oggetto e l'id del tag
+      summary: Elimina un tag da un oggetto
+      parameters:
+        - in: path
+          name: id_obj
+          required: true
+          description: Id dell'oggetto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id_tag
+                - token
+              properties:
+                id_tag:
+                  type: string
+                  description: "Id della tag da eliminare"
+                token:
+                  type: string
+                  description: "Token associato all'utente"
+      responses:
+        "200":
+          description: "Tag eliminato."
+        "400":
+          description: "id_tag mancante."
+        "400":
+          description: "id_tag errato."
+        "400":
+          description: "id_obj errato."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "404":
+          description: "Non esiste un oggetto con tale id."
+        "404":
+          description: "Non esiste un tag con tale id."
+        "500":
+          description: "Errore sul db."
+
+    patch:
+      description: >-
+        Aggiunge un tag all'oggetto e/o un'immagine
+      summary: Aggiunge un tag all'oggetto e/o un'immagine
+      parameters:
+        - in: path
+          name: collId
+          required: true
+          description: Id della collezione
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tag_list
+                - token
+              properties:
+                tag_list:
+                  type: string
+                  description: "Nuovo nome da dare alla collezione"
+                token:
+                  type: string
+                  description: "Token associato all'utente"
+      responses:
+        "201":
+          description: "Oggetto aggiornato con successo."
+        "400":
+          description: "Non esiste tag_list o vi son errori di sintassi."
+        "400":
+          description: "objectId errato."
+        "400":
+          description: "I campi tag non possono essere vuoti."
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
+        "404":
+          description: "Non esiste un oggetto con tale id."
+        "500":
+          description: "Errore sul db."
+
+  /logout:
+    post:
+      description: >-
+        Logout utente. Necessità del token dell'utente
+      summary: Logout 
+      parameters:
+        - in: header
+          name: token
+          required: true
+          description: Token dell'utente
       responses:
         '200':
-          description: 'Oggetto elimitato.'
-        '400':
-          description: 'id_obj mancante.'
-        '400':
-          description: 'id_obj errato.'
+          description: 'Logout avvenuto.'
+        "401":
+          description: "Nessun token fornito."
+        "401":
+          description: "Logout già effettuato."
+        "403":
+          description: "Fallimento autenticazione token."
         '500':
-          description: 'Errore sul db.'
+          description: 'Errore di logout.'
 
 components:
   schemas:
@@ -265,3 +490,14 @@ components:
         tag_list:
           type: [ {tag: String, value: String} ]
           description: "Array contenente tutti i tag e relativi valori appartenenti all'oggetto"
+    Blacklist:
+      type: object
+        - expireAt
+        - token
+      properties:
+        expireAt:
+          type: Date
+          description: "Data di scadenza dell'istanza"
+        toekn:
+          type: string
+          description: "Token dell'utente"
