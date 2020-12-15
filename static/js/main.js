@@ -72,7 +72,19 @@ function modificaCollezione(){
     }
 
     console.log('Modifica nome: ' + id_coll.value + ' ' + nuovoNome.value);
+    
+    var a = {token: localStorage.token, nuovoNome: nuovoNome.value};
     //Implementare metodi
+    fetch('../api/v1/collections/'+id_coll.value, {
+        method: 'PATCH',
+        headers:{'content-type':'application/json'},
+        body: JSON.stringify(a)
+    }).then((resp) => resp.json())
+    .then(function(data){
+        console.log(data);
+        
+        location.href = "./main.html"
+    });
 }
 
 function eliminaCollezione(){

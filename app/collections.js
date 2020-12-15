@@ -112,4 +112,49 @@ router.delete('/', async function(req, res) {
 
 });
 
+router.patch('/:collId',  async function(req, res){
+ 
+    var collId;
+    var collezione;
+    
+    //nuovoNome non valido
+	if( !req.body.nuovoNome){
+		res.status(400).json({success: false, message: "Non esiste un nuovo nome."});
+        return;
+	}
+    
+    // Converto la stringa collectId in oggetto ObjectID
+    try{
+        collId = ObjectID.createFromHexString(req.params.collId);
+    } catch(err){
+        res.status(400).json({success: false, message: "collId errato."});
+        return;
+    }
+
+    //ricerca nel db dell'oggetto indicato
+	try{
+        collezione = await Collection.findById(collId).exec();
+    } catch(err){
+        res.status(500).json({success: false, message: "Errore ricerca sul db."});
+        return;
+    }
+
+    //se ricercato un oggetto che non esiste
+	if( !collezione){
+		res.status(404).json({success: false, message: "Non esiste una collezione con tale id."});
+        return;
+    }
+    
+    var query = {'_id': collezione._id};
+    //applicazione modifiche della collezione
+    try{
+        await Collection.findOneAndUpdate( query,
+        {name: req.body.nuovoNome});
+    }catch(err){
+        res.status(500).json({success: false, message: "Errore update sul db."});
+        return;
+    }
+    res.status(201).json({success: true, message: "Collezione aggiornata con successo."});
+});
+
 module.exports = router;
