@@ -100,9 +100,35 @@ router.delete('/', async function(req, res) {
         return;
     }
 
+	//ottengo tutti gli oggetti della collezione
+	try{
+		var objects = await Obj.find({id_coll: id_coll});
+	}catch(err){
+		res.status(500).json({success: false, message: "Errore ricerca sul db."});
+	}
+
+	//per ogni oggetto della collezione, cerco se ha un immagine
+	for( i in objects){
+		if( typeof(objects[i].objectImage) != "undefined"){
+			//cancellazione immagine dal server
+			fs.unlink(objects[i].objectImage, function(err){
+				if( err){
+					res.status(500).json({success: false, message: "Errore cancellazione immagine."});
+					return;
+				}
+			});
+		}
+		//cancellazione oggetto
+		try{
+	        await Obj.deleteOne({_id: objects[i]._id});
+		} catch(err){
+	        res.status(500).json({success: false, message: "Errore sul db."});
+			return;
+		}
+	}
+
     // Eliminazione della collezione
     try{
-        await Obj.deleteMany({id_coll: req.body.id_coll}); // Eliminazione di tutti gli oggetti appartenenti alla collezione
         await Collection.deleteOne({_id: id_coll}); // Eliminazione della collezione
         console.log('Collezione id: ' + req.body.id_coll + ' eliminata'); // Stampa di controllo
         res.status(200).json({success: true, message: "Collezione eliminata."});
