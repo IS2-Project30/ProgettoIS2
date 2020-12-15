@@ -93,6 +93,7 @@ h3{
     width: 30px;
     height: 30px;
     border: none;
+    z-index: 100;
 }
 .btn-proj.cancel {
     left: 5px;
