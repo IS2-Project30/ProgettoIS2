@@ -67,7 +67,7 @@ router.get('/', async function(req, res){
 /*
     // Sa le ricerca non ha restituito alcun oggetto
     if(!(obj !== undefined && obj.length > 0)){
-        res.status(200).json({success: true, message: "Non ci sono oggetti"});
+        res.status(200).json({success: true, message: "Non ci sono oggetti."});
         return;
     }
 */
@@ -116,7 +116,7 @@ router.post('/', async function(req, res){
         return;
     }
 
-    // Creo l'oggetto da salvare, AGGINGERE tag_list
+    // Creo l'oggetto da salvare
     const obj = new Obj({
         name: req.body.obj.name,
         id_coll: req.body.obj.id_coll,
