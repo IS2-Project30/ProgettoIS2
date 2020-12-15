@@ -57,6 +57,13 @@ router.get('/', async function(req, res){
         res.status(500).json({success: false, message: "Errore ricerca sul db."});
         return;
     }
+
+	//collezione non trovata
+	if(coll == null){
+		res.status(404).json({success: false, message: "Campo id_coll non valido."});
+		return;
+	}
+
 /*
     // Sa le ricerca non ha restituito alcun oggetto
     if(!(obj !== undefined && obj.length > 0)){
