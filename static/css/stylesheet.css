@@ -1,9 +1,11 @@
-* {
+*{
     box-sizing: border-box;
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+    height: 100%;
 }
 
 a:hover, a:link, a:visited, a:active{
@@ -14,12 +16,20 @@ h3{
     margin: 2em 0;
 }
 
+.nome{
+    position: absolute;
+    cursor: pointer;
+}
 .nome a{
     color: #9d9d9d;
     position: fixed;
     right: 50%;
     top: 12px;
     text-align: center;
+}
+.logout{
+    position: absolute;
+    cursor: pointer;
 }
 .logout a{
     color: #9d9d9d;
@@ -28,7 +38,10 @@ h3{
     top: 12px;
     text-align: right;
 }
-
+.rendo{
+    position: absolute;
+    cursor: pointer;
+}
 .rendo a{
     color: #9d9d9d;
     position: fixed;
@@ -36,52 +49,35 @@ h3{
     top:12px;
     text-align: left;
 }
-
-/* Float four columns side by side */
+.body-container{
+    margin-left: 35px;
+    width: 90%;
+    height: 100%;
+}
+.row {
+    display: -moz-grid;
+}
 .column {
     position: relative;
     float: left;
-    margin: 10px;
-    width: 30%;
-    max-width: 200px;
     align-items: center;
+    margin: 15px;
+    width: 250px;
+    height: 300px;
 }
-
-/* Remove extra left and right margins, due to padding */
-.row {
-    margin: 5px;
-}
-
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* Responsive columns */
-@media screen and (max-width: 700px) {
-    .column {
-        width: 100%;
-        display: block;
-        margin-bottom: 15px;
-    }
-}
-
-/* Style the counter cards */
 .card {
+    position: absolute;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    padding: 10px;
     text-align: center;
     align-items: center;
     background-color: #f1f1f1;
-    min-height: 150px;
-    min-width: 200px;
+    height: 300px;
+    width: 250px;
 }
-
 .img_card{
-    width: 75%;
-    height: 75%;
+    margin-top: 70px;
+    width: 150px;
+    height: 150px;
 }
 
 .a-proj{
@@ -141,10 +137,61 @@ h3{
     align-items: center;
     flex-direction: column;
 }
+.modal2{
+    position: relative;
+    background-color: white;
+    padding: 15px;
+    width: 55%;
+    height:44%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
 .modal-m-close, .modal-c-close{
     position: absolute;
     top: 10px;
     right: 10px;
     font-weight: bold; 
     cursor: pointer;   
+}
+.card h3{
+    top: 0;
+    right: 0;
+    margin-top: 15px;
+}
+.tag{
+    padding-bottom: 20px;
+    justify-content: space-between;
+}
+.scroll{
+    position: relative;
+    top: 50px;
+    height: 240px;
+    left: 15px;
+    width: 90%;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+@media all and (max-width: 736px){
+    .row {
+        display: -ms-grid;
+    }
+    
+    .column {
+        position: relative;
+        float: left;
+        width: 100%;
+        align-items: center;
+    }
+    .card {
+        position: absolute;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+        align-items: center;
+        background-color: #f1f1f1;
+        height: 300px;
+        width: 100vw;
+    }
 }
